@@ -23,35 +23,57 @@ class LaporanController extends Controller
                 $tahun = \App\Models\Stunting::max('tahun') ?? 2025;
                 $data = \App\Models\Stunting::where('tahun', $tahun)
                     ->join('kecamatans', 'stuntings.kecamatan_id', '=', 'kecamatans.id')
-                    ->select('kecamatans.nama as Kecamatan', 'stuntings.jumlah_balita as Total Balita', 'stuntings.jumlah_balita_diukur as Balita Diukur', 'stuntings.jumlah_stunting as Jumlah Stunting', \DB::raw('ROUND((stuntings.jumlah_stunting / NULLIF(stuntings.jumlah_balita_diukur, 0)) * 100, 2) as Prevalensi (%)'))
+                    ->select('kecamatans.nama as Kecamatan', 'stuntings.jumlah_balita as Total Balita', 'stuntings.jumlah_balita_diukur as Balita Diukur', 'stuntings.jumlah_stunting as Jumlah Stunting', \DB::raw('ROUND((stuntings.jumlah_stunting * 100.0 / NULLIF(stuntings.jumlah_balita_diukur, 0)), 2) as "Prevalensi (%)"'))
                     ->get()->toArray();
                 $headers = ['Kecamatan', 'Total Balita', 'Balita Diukur', 'Jumlah Stunting', 'Prevalensi (%)'];
                 break;
             case 'penyakit':
-                $title = 'Laporan Wabah & Penyakit';
+                $title = "Laporan Wabah & Penyakit";
                 $tahun = \App\Models\KasusPenyakit::max('tahun') ?? 2025;
                 $data = \App\Models\KasusPenyakit::where('tahun', $tahun)
                     ->join('kecamatans', 'kasus_penyakits.kecamatan_id', '=', 'kecamatans.id')
-                    ->select('kecamatans.nama as Kecamatan', 'kasus_penyakits.malaria as Malaria', 'kasus_penyakits.tb_paru as TB Paru', 'kasus_penyakits.pneumonia as Pneumonia', 'kasus_penyakits.diare as Diare', 'kasus_penyakits.dbd as DBD')
+                    ->select(
+                        'kecamatans.nama as Kecamatan', 
+                        'kasus_penyakits.malaria as Malaria', 
+                        'kasus_penyakits.tb_paru as TB Paru', 
+                        'kasus_penyakits.pneumonia as Pneumonia', 
+                        'kasus_penyakits.kusta as Kusta',
+                        'kasus_penyakits.tetanus_neonatorum as Tetanus',
+                        'kasus_penyakits.campak as Campak',
+                        'kasus_penyakits.diare as Diare', 
+                        'kasus_penyakits.dbd as DBD',
+                        'kasus_penyakits.hiv_baru as HIV',
+                        'kasus_penyakits.ims as IMS'
+                    )
                     ->get()->toArray();
-                $headers = ['Kecamatan', 'Malaria', 'TB Paru', 'Pneumonia', 'Diare', 'DBD'];
+                $headers = ['Kecamatan', 'Malaria', 'TB Paru', 'Pneumonia', 'Kusta', 'Tetanus', 'Campak', 'Diare', 'DBD', 'HIV', 'IMS'];
                 break;
             case 'faskes':
-                $title = 'Laporan Fasilitas Kesehatan';
-                $data = \App\Models\Faskes::where('status', 'Aktif')
+                $title = "Laporan Fasilitas Kesehatan Tahunan";
+                $tahun = \App\Models\Faskes::max('tahun') ?? 2025;
+                $data = \App\Models\Faskes::where('tahun', $tahun)
                     ->join('kecamatans', 'faskes.kecamatan_id', '=', 'kecamatans.id')
-                    ->select('faskes.nama as Nama Faskes', 'faskes.jenis as Jenis', 'kecamatans.nama as Kecamatan', 'faskes.alamat as Alamat')
+                    ->select('kecamatans.nama as Kecamatan', 'faskes.rs_umum as RS Umum', 'faskes.puskesmas as Puskesmas', 'faskes.klinik as Klinik', 'faskes.posyandu as Posyandu', 'faskes.poskesdes as Poskesdes', 'faskes.total as Total')
                     ->get()->toArray();
-                $headers = ['Nama Faskes', 'Jenis', 'Kecamatan', 'Alamat'];
+                $headers = ['Kecamatan', 'RS Umum', 'Puskesmas', 'Klinik', 'Posyandu', 'Poskesdes', 'Total'];
                 break;
             case 'nakes':
                 $title = 'Laporan Tenaga Kesehatan';
                 $tahun = \App\Models\TenagaKesehatan::max('tahun') ?? 2025;
                 $data = \App\Models\TenagaKesehatan::where('tahun', $tahun)
                     ->join('kecamatans', 'tenaga_kesehatans.kecamatan_id', '=', 'kecamatans.id')
-                    ->select('kecamatans.nama as Kecamatan', 'tenaga_kesehatans.puskesmas as Unit', 'tenaga_kesehatans.dokter_umum as Dokter Umum', 'tenaga_kesehatans.dokter_gigi as Dokter Gigi', 'tenaga_kesehatans.perawat as Perawat', 'tenaga_kesehatans.bidan as Bidan')
+                    ->select(
+                        'kecamatans.nama as Kecamatan', 
+                        'tenaga_kesehatans.dokter_umum as Dokter Umum', 
+                        'tenaga_kesehatans.dokter_gigi as Dokter Gigi', 
+                        'tenaga_kesehatans.perawat as Perawat', 
+                        'tenaga_kesehatans.bidan as Bidan',
+                        'tenaga_kesehatans.farmasi as Farmasi',
+                        'tenaga_kesehatans.gizi as Gizi',
+                        'tenaga_kesehatans.total as Total Nakes'
+                    )
                     ->get()->toArray();
-                $headers = ['Kecamatan', 'Unit', 'Dokter Umum', 'Dokter Gigi', 'Perawat', 'Bidan'];
+                $headers = ['Kecamatan', 'Dokter Umum', 'Dokter Gigi', 'Perawat', 'Bidan', 'Farmasi', 'Gizi', 'Total Nakes'];
                 break;
             default:
                 abort(404, 'Tipe laporan tidak ditemukan');

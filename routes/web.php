@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 // routes/web.php
 
 use App\Http\Controllers\DashboardController;
@@ -10,6 +10,7 @@ use App\Http\Controllers\AKIAKBController;
 use App\Http\Controllers\ImunisasiController;
 use App\Http\Controllers\AnalisisController;
 use App\Http\Controllers\LaporanController;
+use App\Http\Controllers\PosyanduController;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -24,6 +25,7 @@ Route::resource('penyakit', PenyakitController::class);
 Route::resource('stunting', StuntingController::class);
 Route::resource('aki-akb', AKIAKBController::class);
 Route::resource('imunisasi', ImunisasiController::class);
+Route::resource('posyandu', PosyanduController::class);
 
 // Analisis Routes
 Route::prefix('analisis')->name('analisis.')->group(function () {

@@ -1,4 +1,4 @@
-﻿@extends('layouts.app')
+@extends('layouts.app')
 
 @section('title', 'Dashboard')
 @section('page-title', 'Dashboard Analisa Kesehatan')
@@ -74,7 +74,7 @@
                     <p class="text-sm text-gray-600 mb-1">Angka Kematian Ibu</p>
                     <h3 class="text-3xl font-bold text-gray-900">{{ number_format($aki, 1) }}</h3>
                     <p class="text-xs text-gray-500 mt-2">
-                        <span class="font-semibold">per 100.000</span> kelahiran hidup
+                        <span class="font-semibold">Total Kasus</span> tercatat
                     </p>
                 </div>
                 <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
@@ -91,7 +91,7 @@
         <!-- Kasus Penyakit Terbanyak -->
         <div class="bg-white rounded-lg shadow-md p-6">
             <div class="flex justify-between items-center mb-4">
-                <h3 class="font-bold text-gray-900">10 Kasus Penyakit Terbanyak</h3>
+                <h3 class="font-bold text-gray-900">Akumulasi 10 Penyakit Terbanyak</h3>
                 <button class="text-gray-400 hover:text-gray-600">
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z"></path>
@@ -128,46 +128,77 @@
             </div>
         </div>
         
-        <!-- Quick Stats & Imunisasi -->
+        <!-- Nakes & Lingkungan -->
         <div class="space-y-6">
-            <!-- Cakupan Imunisasi -->
-            <div class="bg-white rounded-lg shadow-md p-6">
-                <h3 class="font-bold text-gray-900 mb-4">Cakupan Imunisasi Dasar</h3>
-                <div class="h-40 relative">
-                    <canvas id="imunisasiChart"></canvas>
-                    <div class="absolute inset-0 flex items-center justify-center flex-col pt-4">
-                        <span class="text-2xl font-bold text-gray-900">{{ $imunisasiLengkap }}%</span>
-                        <span class="text-xs text-gray-500">Lengkap</span>
+            <!-- Rasio Nakes -->
+            <div class="bg-white rounded-lg shadow-md p-6 border-t-4 border-indigo-600">
+                <h3 class="font-bold text-gray-900 mb-4 flex items-center">
+                    <i class="fas fa-user-md text-indigo-600 mr-2 text-xl"></i>
+                    Rasio Ketersediaan Nakes
+                </h3>
+                
+                <div class="space-y-5">
+                    <div>
+                        <div class="flex justify-between items-end mb-1">
+                            <span class="text-sm font-medium text-gray-700">Dokter Umum</span>
+                            <span class="text-xs font-bold text-indigo-600">1 : {{ number_format($rasioDokter, 0, ',', '.') }}</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-indigo-600 h-2.5 rounded-full" style="width: {{ min(100, (2500 / max(1, $rasioDokter)) * 100) }}%"></div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Standar ideal WHO: 1 Dokter per 2.500 Penduduk</p>
+                    </div>
+                    
+                    <div>
+                        <div class="flex justify-between items-end mb-1">
+                            <span class="text-sm font-medium text-gray-700">Bidan Desa</span>
+                            <span class="text-xs font-bold text-pink-600">1 : {{ number_format($rasioBidan, 0, ',', '.') }}</span>
+                        </div>
+                        <div class="w-full bg-gray-200 rounded-full h-2.5">
+                            <div class="bg-pink-500 h-2.5 rounded-full" style="width: {{ min(100, (1000 / max(1, $rasioBidan)) * 100) }}%"></div>
+                        </div>
+                        <p class="text-xs text-gray-500 mt-1">Standar ideal: 1 Bidan per 1.000 Penduduk</p>
                     </div>
                 </div>
             </div>
             
-            <!-- Highlight Alerts -->
-            <div class="bg-white rounded-lg shadow-md p-6">
+            <!-- Lingkungan & BPJS -->
+            <div class="bg-white rounded-lg shadow-md p-6 border-t-4 border-teal-500">
                 <h3 class="font-bold text-gray-900 mb-4 flex items-center">
-                    <svg class="w-5 h-5 text-yellow-500 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"></path>
-                    </svg>
-                    Peringatan Sistem
+                    <i class="fas fa-shield-alt text-teal-500 mr-2 text-xl"></i>
+                    Cakupan Program Prioritas
                 </h3>
                 
-                @if(count($alerts) > 0)
-                    <div class="space-y-3">
-                        @foreach($alerts as $alert)
-                        <div class="p-3 bg-red-50 border-l-4 border-red-500 rounded text-sm">
-                            <p class="font-semibold text-red-800">{{ $alert->title }}</p>
-                            <p class="text-red-600 text-xs mt-1">{{ $alert->message }}</p>
+                <div class="flex items-center justify-between mb-4 pb-4 border-b border-gray-100">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-teal-100 flex items-center justify-center text-teal-600 mr-3">
+                            <i class="fas fa-id-card"></i>
                         </div>
-                        @endforeach
+                        <div>
+                            <p class="text-sm font-medium text-gray-700">Kepesertaan JKN/BPJS</p>
+                            <p class="text-xs text-gray-500">Universal Health Coverage</p>
+                        </div>
                     </div>
-                @else
-                    <div class="text-center py-6 text-gray-500">
-                        <svg class="w-12 h-12 mx-auto text-gray-300 mb-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                        </svg>
-                        <p class="text-sm">Tidak ada peringatan aktif saat ini.</p>
+                    <div class="text-right">
+                        <span class="text-xl font-bold text-gray-900">{{ $cakupanBPJS }}%</span>
                     </div>
-                @endif
+                </div>
+                
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <div class="w-10 h-10 rounded-full bg-green-100 flex items-center justify-center text-green-600 mr-3">
+                            <i class="fas fa-leaf"></i>
+                        </div>
+                        <div>
+                            <p class="text-sm font-medium text-gray-700">Desa ODF</p>
+                            <p class="text-xs text-gray-500">Open Defecation Free</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <span class="text-xl font-bold text-gray-900">{{ $desaODF }}</span>
+                        <span class="text-xs text-gray-500 block">dari {{ $totalDesa }} Desa</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -254,26 +285,6 @@ new Chart(stuntingCtx, {
     }
 });
 
-// Imunisasi Chart
-const imunisasiCtx = document.getElementById('imunisasiChart').getContext('2d');
-new Chart(imunisasiCtx, {
-    type: 'doughnut',
-    data: {
-        labels: ['Lengkap', 'Belum Lengkap'],
-        datasets: [{
-            data: [{!! $imunisasiLengkap !!}, {!! max(0, 100 - $imunisasiLengkap) !!}],
-            backgroundColor: [chartColors.green, '#E5E7EB'],
-            borderWidth: 0
-        }]
-    },
-    options: {
-        responsive: true,
-        maintainAspectRatio: true,
-        plugins: {
-            legend: { position: 'bottom' }
-        }
-    }
-});
 
 // Leaflet Map for Stunting using GeoJSON
 const stuntingMapData = {!! json_encode($stuntingMapData) !!};

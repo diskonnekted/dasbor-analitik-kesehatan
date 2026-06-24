@@ -7,4 +7,9 @@ use Illuminate\Database\Eloquent\Model;
 class Kecamatan extends Model
 {
     protected $guarded = [];
+
+    public function posyandus()
+    {
+        return $this->hasMany(Posyandu::class);
+    }
 }

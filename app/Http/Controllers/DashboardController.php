@@ -54,14 +54,11 @@ class DashboardController extends Controller
             
         $stuntingTrend = round($prevalensiStunting - $prevalensiTahunLalu, 1);
         
-        // KPI: AKI
-        $aki = AKI::where('tahun', $tahunAKI)
-            ->select(DB::raw('SUM(jumlah_kematian_ibu) * 100000.0 / NULLIF(SUM(jumlah_kelahiran_hidup), 0) as aki'))
-            ->value('aki') ?? 0;
+        // KPI: AKI (Total Kasus)
+        $aki = AKI::where('tahun', $tahunAKI)->sum('jumlah_kematian_ibu');
         
-        // Chart: 10 Penyakit Terbanyak
-        $kasusPenyakit = KasusPenyakit::where('tahun', $tahunPenyakit)
-            ->selectRaw('
+        // Chart: 10 Penyakit Terbanyak (Akumulasi Semua Tahun karena data 2024 belum lengkap untuk semua penyakit)
+        $kasusPenyakit = KasusPenyakit::selectRaw('
                 SUM(malaria) as malaria, SUM(tb_paru) as tb_paru, SUM(pneumonia) as pneumonia, 
                 SUM(kusta) as kusta, SUM(tetanus_neonatorum) as tetanus_neonatorum, SUM(campak) as campak, 
                 SUM(diare) as diare, SUM(dbd) as dbd, SUM(hiv_baru) as hiv_baru, SUM(ims) as ims

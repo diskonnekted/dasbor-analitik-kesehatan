@@ -54,6 +54,11 @@ class OpenDataBanjarnegaraService
             'resource_id' => '3c5913a4-c2e0-4e72-9645-db79f719cfeb',
             'model' => PasienRawat::class,
         ],
+        'posyandu' => [
+            'id' => 'jumlah-posyandu-dan-kadernya-di-kabupaten-banjarnegara',
+            'resource_id' => '690b15ac-ec28-42ca-a866-4901b07800ef',
+            'model' => Posyandu::class,
+        ],
     ];
     
     /**
@@ -167,6 +172,8 @@ class OpenDataBanjarnegaraService
                 return $this->importPersalinan($data);
             case 'pasien_rawat':
                 return $this->importPasienRawat($data);
+            case 'posyandu':
+                return $this->importPosyandu($data);
             default:
                 return 0;
         }
@@ -409,6 +416,40 @@ class OpenDataBanjarnegaraService
     }
     
     /**
+     * Import Posyandu
+     */
+    private function importPosyandu($data)
+    {
+        $imported = 0;
+        
+        DB::transaction(function () use ($data, &$imported) {
+            foreach ($data as $row) {
+                $puskesmas = trim($row['Puskesmas']);
+                $tahun = (int) $row['Tahun'];
+                
+                $kecamatan = $this->getKecamatanByPuskesmas($puskesmas);
+                if (!$kecamatan) continue;
+                
+                Posyandu::updateOrCreate(
+                    [
+                        'kecamatan_id' => $kecamatan->id,
+                        'tahun' => $tahun,
+                        'puskesmas' => $puskesmas,
+                    ],
+                    [
+                        'jumlah_posyandu' => $this->parseInt($row['Jumlah Posyandu']),
+                        'jumlah_kader' => $this->parseInt($row['Jumlah Kader Posyandu']),
+                    ]
+                );
+                
+                $imported++;
+            }
+        });
+        
+        return $imported;
+    }
+    
+    /**
      * Helper: Parse integer dari string
      */
     private function parseInt($value)
@@ -422,24 +463,35 @@ class OpenDataBanjarnegaraService
      */
     private function getKecamatanByPuskesmas($puskesmas)
     {
-        // Mapping nama puskesmas ke kecamatan
+        // Bersihkan angka (Arab & Romawi) dan spasi berlebih
+        $cleanName = trim(preg_replace('/[0-9]+| I+| II+| III+/', '', $puskesmas));
+        
         $mapping = [
-            'Susukan 1' => 'Susukan',
-            'Susukan 2' => 'Susukan',
-            'Pwj Klampok 1' => 'Purwareja Klampok',
-            'Pwj Klampok 2' => 'Purwareja Klampok',
-            'Mandiraja 1' => 'Mandiraja',
-            'Mandiraja 2' => 'Mandiraja',
-            // ... tambahkan mapping lainnya
+            'Susukan' => 'Susukan',
+            'Pwj Klampok' => 'Purwareja Klampok',
+            'Mandiraja' => 'Mandiraja',
+            'Purwonegoro' => 'Purwanegara',
+            'Bawang' => 'Bawang',
+            'Banjarnegara' => 'Banjarnegara',
+            'Pagedongan' => 'Pagedongan',
+            'Sigaluh' => 'Sigaluh',
+            'Madukara' => 'Madukara',
+            'Banjarmangu' => 'Banjarmangu',
+            'Wanadadi' => 'Wanadadi',
+            'Rakit' => 'Rakit',
+            'Punggelan' => 'Punggelan',
+            'Karangkobar' => 'Karangkobar',
+            'Pagentan' => 'Pagentan',
+            'Pejawaran' => 'Pejawaran',
+            'Batur' => 'Batur',
+            'Wanayasa' => 'Wanayasa',
+            'Kalibening' => 'Kalibening',
+            'Pandanarum' => 'Pandanarum',
         ];
         
-        $kecamatanName = $mapping[$puskesmas] ?? null;
+        $kecamatanName = $mapping[$cleanName] ?? $cleanName;
         
-        if ($kecamatanName) {
-            return Kecamatan::where('nama', $kecamatanName)->first();
-        }
-        
-        return null;
+        return Kecamatan::where('nama', 'like', "%{$kecamatanName}%")->first();
     }
 }
 

@@ -27,8 +27,8 @@
     <button onclick="window.print()" class="print-btn no-print">Cetak Sekarang (Print to PDF)</button>
 
     <div class="header">
-        <h1>Sistem Informasi Manajemen Kesehatan</h1>
-        <p>Pemerintah Kabupaten Banjarnegara</p>
+        <h1>Jaga Data Nusantara (JDN)</h1>
+        <p>Dasbor Analitik Kesehatan</p>
         <h2 style="margin-top: 15px;">{{ $title }}</h2>
         <p>Tanggal Cetak: {{ date('d/m/Y H:i') }}</p>
     </div>
@@ -59,7 +59,7 @@
     </table>
 
     <div class="footer">
-        <p>Dicetak secara otomatis oleh Sistem Aplikasi Kesehatan Banjarnegara</p>
+        <p>Dicetak secara otomatis melalui Dasbor Analitik JDN</p>
     </div>
 
     <script>

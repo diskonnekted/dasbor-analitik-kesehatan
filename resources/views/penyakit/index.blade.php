@@ -16,7 +16,7 @@
         <table class="min-w-full divide-y divide-gray-200">
             <thead class="bg-gray-100">
                 <tr>
-                    <?php foreach(['ID', 'Kecamatan', 'Tahun', 'Malaria', 'TB Paru', 'Pneumonia', 'DBD', 'Diare'] as $col): ?>
+                    <?php foreach(['ID', 'Kecamatan', 'Tahun', 'Malaria', 'TB Paru', 'Pneumonia', 'Kusta', 'Tetanus', 'Campak', 'Diare', 'DBD', 'HIV', 'IMS'] as $col): ?>
                         <th class="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">{{ $col }}</th>
                     <?php endforeach; ?>
                 </tr>
@@ -24,7 +24,7 @@
             <tbody class="bg-white divide-y divide-gray-200">
                 @forelse ($data as $item)
                 <tr class="hover:bg-gray-50 transition">
-                    <?php foreach([$item->id, $item->kecamatan_nama, $item->tahun, $item->malaria, $item->tb_paru, $item->pneumonia, $item->dbd, $item->diare] as $val): ?>
+                    <?php foreach([$item->id, $item->kecamatan_nama, $item->tahun, $item->malaria, $item->tb_paru, $item->pneumonia, $item->kusta, $item->tetanus_neonatorum, $item->campak, $item->diare, $item->dbd, $item->hiv_baru, $item->ims] as $val): ?>
                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $val ?? '-' }}</td>
                     <?php endforeach; ?>
                 </tr>

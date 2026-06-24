@@ -11,7 +11,11 @@ class AKIAKBController extends Controller
     {
         $data = DB::table('akis')
             ->leftJoin('kecamatans', 'akis.kecamatan_id', '=', 'kecamatans.id')
-            ->select('akis.*', 'kecamatans.nama as kecamatan_nama')
+            ->leftJoin('akbs', function($join) {
+                $join->on('akis.puskesmas', '=', 'akbs.puskesmas')
+                     ->on('akis.tahun', '=', 'akbs.tahun');
+            })
+            ->select('akis.*', 'kecamatans.nama as kecamatan_nama', 'akbs.jumlah_kematian_bayi')
             ->paginate(15);
             
         return view('aki-akb.index', compact('data'));

@@ -4,80 +4,96 @@
 @section('page-title', 'Peta Sebaran Posyandu & Kader')
 
 @section('content')
-<div class="space-y-6">
-    <!-- Map Section -->
-    <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-        <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
-            <h3 class="text-lg font-bold text-gray-900">Peta Spasial Posyandu</h3>
-            <p class="text-sm text-gray-500">Visualisasi geografis sebaran jumlah posyandu dan kader per kecamatan.</p>
+<div class="space-y-8">
+    <!-- Top Hero Banner (Neo-Brutalist) -->
+    <div class="bg-white border-2 border-[#171717] p-8 shadow-[4px_4px_0px_0px_#171717] flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div class="max-w-3xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#171717] text-white text-[10px] font-mono font-bold tracking-widest uppercase mb-4 border border-[#171717] shadow-[2px_2px_0px_0px_#171717]">
+                <i data-lucide="map-pin" class="w-3.5 h-3.5 text-indigo-400"></i>
+                Healthcare Facilities mapping
+            </div>
+            <h1 class="text-3xl font-serif font-black text-[#171717] uppercase tracking-tight mb-2">Sebaran Posyandu & Kader</h1>
+            <p class="text-neutral-600 font-mono font-bold text-xs leading-relaxed">
+                Pemetaan geografis posyandu aktif beserta jumlah kader kesehatan per kecamatan di seluruh wilayah Kabupaten Banjarnegara.
+            </p>
         </div>
-        <div id="map" class="h-96 w-full z-0"></div>
+    </div>
+
+    <!-- Map Section -->
+    <div class="bg-white border-2 border-[#171717] shadow-[4px_4px_0px_0px_#171717]">
+        <div class="px-6 py-4 border-b-2 border-[#171717] bg-[#f4f4f0] flex justify-between items-center">
+            <h3 class="text-sm font-serif font-black uppercase tracking-widest text-[#171717] flex items-center gap-2">
+                <i data-lucide="map" class="w-4.5 h-4.5 text-indigo-600"></i>
+                Peta Spasial Sebaran Posyandu
+            </h3>
+            <span class="inline-flex items-center gap-1.5 px-3 py-1 bg-white border-2 border-[#171717] shadow-[1px_1px_0px_0px_#171717] text-[10px] font-mono font-bold tracking-wider text-indigo-700 uppercase">
+                Posyandu GIS
+            </span>
+        </div>
+        
+        <div id="map" style="height: 450px; width: 100%; z-index: 0;"></div>
     </div>
 
     <!-- Data Table Section -->
-    <div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-        <div class="px-6 py-5 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
-            <h3 class="text-lg font-bold text-gray-900">Daftar Detail Posyandu & Kader</h3>
-            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-red-100 text-red-800">
-                Data OpenData
+    <div class="bg-white border-2 border-[#171717] shadow-[4px_4px_0px_0px_#171717] overflow-hidden">
+        <div class="px-6 py-5 border-b-2 border-[#171717] bg-[#f4f4f0] flex justify-between items-center">
+            <h3 class="text-sm font-serif font-black uppercase tracking-widest text-[#171717]">Daftar Detail Posyandu & Kader</h3>
+            <span class="inline-block px-3 py-1 bg-indigo-200 border-2 border-[#171717] text-indigo-950 font-mono font-black text-[10px] shadow-[1.5px_1.5px_0px_0px_#171717]">
+                DATA OPEN DATA
             </span>
         </div>
 
         <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-100">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">ID</th>
-                        <th class="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Kecamatan</th>
-                        <th class="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Puskesmas</th>
-                        <th class="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Tahun</th>
-                        <th class="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Jumlah Posyandu</th>
-                        <th class="px-6 py-3 text-left text-xs font-bold text-gray-700 uppercase tracking-wider">Jumlah Kader</th>
+            <table class="w-full border-collapse border-b-2 border-[#171717] text-left text-xs font-mono font-bold">
+                <thead>
+                    <tr class="bg-neutral-50 border-b-2 border-[#171717]">
+                        @foreach(['ID', 'Kecamatan', 'Puskesmas', 'Tahun', 'Jumlah Posyandu', 'Jumlah Kader'] as $col)
+                            <th class="px-6 py-4 border-r-2 border-[#171717] uppercase tracking-wider text-center">{{ $col }}</th>
+                        @endforeach
                     </tr>
                 </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
+                <tbody class="divide-y-2 divide-[#171717]">
                     @forelse ($data as $item)
-                    <tr class="hover:bg-gray-50 transition">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $item->id }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 font-medium">{{ $item->kecamatan->nama ?? '-' }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $item->puskesmas }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ $item->tahun }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-blue-600">{{ number_format($item->jumlah_posyandu, 0, ',', '.') }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-bold text-green-600">{{ number_format($item->jumlah_kader, 0, ',', '.') }}</td>
-                    </tr>
+                        <tr class="hover:bg-neutral-50 transition-colors">
+                            <td class="px-6 py-4 border-r-2 border-[#171717] text-center">{{ $item->id }}</td>
+                            <td class="px-6 py-4 border-r-2 border-[#171717] uppercase font-serif font-black text-sm">{{ $item->kecamatan->nama ?? '-' }}</td>
+                            <td class="px-6 py-4 border-r-2 border-[#171717] font-bold">{{ $item->puskesmas }}</td>
+                            <td class="px-6 py-4 border-r-2 border-[#171717] text-center">{{ $item->tahun }}</td>
+                            <td class="px-6 py-4 border-r-2 border-[#171717] text-center font-black text-sm text-blue-700 bg-blue-50">{{ number_format($item->jumlah_posyandu, 0, ',', '.') }}</td>
+                            <td class="px-6 py-4 text-center font-black text-sm text-emerald-700 bg-emerald-50">{{ number_format($item->jumlah_kader, 0, ',', '.') }}</td>
+                        </tr>
                     @empty
-                    <tr>
-                        <td colspan="6" class="px-6 py-8 text-center">
-                            <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
-                            </svg>
-                            <p class="mt-4 text-gray-500">Belum ada data. Lakukan sinkronisasi terlebih dahulu.</p>
-                        </td>
-                    </tr>
+                        <tr>
+                            <td colspan="6" class="px-6 py-12 text-center text-neutral-500">
+                                Belum ada data. Lakukan sinkronisasi terlebih dahulu.
+                            </td>
+                        </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
         
         @if($data->hasPages())
-        <div class="px-6 py-4 border-t border-gray-200 bg-gray-50">
-            {{ $data->links() }}
-        </div>
+            <div class="px-6 py-4 bg-[#f4f4f0] border-t-2 border-[#171717] font-mono">
+                {{ $data->links() }}
+            </div>
         @endif
     </div>
 </div>
+@endsection
+
+@push('styles')
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+@endpush
 
 @push('scripts')
-<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-
 <script>
     document.addEventListener('DOMContentLoaded', function() {
-        // Init map coordinates for Banjarnegara
         const map = L.map('map').setView([-7.3980, 109.6965], 11);
 
-        L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
-            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
         }).addTo(map);
 
         const mapData = @json($mapData);
@@ -88,23 +104,23 @@
                 
                 L.circleMarker([kec.latitude, kec.longitude], {
                     radius: radius,
-                    fillColor: '#ef4444', // Red
-                    color: '#fff',
+                    fillColor: '#8b5cf6', // Violet/Indigo
+                    color: '#171717',
                     weight: 2,
                     opacity: 1,
-                    fillOpacity: 0.7
+                    fillOpacity: 0.8
                 }).addTo(map)
                 .bindPopup(`
-                    <div class="text-center">
-                        <strong class="block text-lg border-b pb-1 mb-1">${kec.nama}</strong>
-                        <div class="grid grid-cols-2 gap-4 mt-2">
-                            <div>
-                                <span class="block text-xs text-gray-500 uppercase">Posyandu</span>
-                                <span class="block text-xl font-bold text-blue-600">${kec.jumlah_posyandu}</span>
+                    <div style="font-family: 'Courier New', monospace; font-size: 11px; font-weight: bold; color: #171717; min-width: 170px; padding: 2px;">
+                        <strong style="font-size: 13px; font-weight: 900; text-transform: uppercase; display:block; border-bottom: 2px solid #171717; padding-bottom: 4px; mb-4;">${kec.nama}</strong>
+                        <div style="display: grid; grid-template-cols: 1fr 1fr; gap: 6px; margin-top: 8px;">
+                            <div style="background: #eff6ff; padding: 4px; border: 1px solid #171717; text-align: center;">
+                                <span style="font-size: 8px; display:block; color:#2563eb;">POSYANDU</span>
+                                <span style="font-size: 15px; font-weight:900;">${kec.jumlah_posyandu}</span>
                             </div>
-                            <div>
-                                <span class="block text-xs text-gray-500 uppercase">Kader</span>
-                                <span class="block text-xl font-bold text-green-600">${kec.jumlah_kader}</span>
+                            <div style="background: #ecfdf5; padding: 4px; border: 1px solid #171717; text-align: center;">
+                                <span style="font-size: 8px; display:block; color:#059669;">KADER</span>
+                                <span style="font-size: 15px; font-weight:900;">${kec.jumlah_kader}</span>
                             </div>
                         </div>
                     </div>
@@ -114,4 +130,3 @@
     });
 </script>
 @endpush
-@endsection

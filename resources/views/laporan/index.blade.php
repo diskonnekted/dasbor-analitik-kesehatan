@@ -4,68 +4,84 @@
 @section('page-title', 'Pusat Laporan Kesehatan')
 
 @section('content')
-<div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-    <div class="px-6 py-5 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
-        <h3 class="text-lg font-bold text-gray-900">Modul Laporan</h3>
+<div class="space-y-8">
+    <!-- Top Hero Banner (Neo-Brutalist) -->
+    <div class="bg-white border-2 border-[#171717] p-8 shadow-[4px_4px_0px_0px_#171717] flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div class="max-w-3xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#171717] text-white text-[10px] font-mono font-bold tracking-widest uppercase mb-4 border border-[#171717] shadow-[2px_2px_0px_0px_#171717]">
+                <i data-lucide="file-text" class="w-3.5 h-3.5 text-neutral-400"></i>
+                Reporting Center
+            </div>
+            <h1 class="text-3xl font-serif font-black text-[#171717] uppercase tracking-tight mb-2">Pusat Unduhan Laporan</h1>
+            <p class="text-neutral-600 font-mono font-bold text-xs leading-relaxed">
+                Hasilkan lembar rekapitulasi data kesehatan Kabupaten Banjarnegara dalam format interaktif (HTML), tabulasi (Excel), maupun dokumen cetak (PDF).
+            </p>
+        </div>
     </div>
 
-    <div class="p-6">
-        @if(session('success'))
-            <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4">
-                {{ session('success') }}
+    <!-- Reports Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Card: Laporan Stunting -->
+        <div class="bg-white border-2 border-[#171717] p-6 shadow-[4px_4px_0px_0px_#171717] flex flex-col justify-between hover:shadow-[6px_6px_0px_0px_#171717] transition-all">
+            <div>
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="w-2 h-6 bg-amber-400 border border-[#171717]"></span>
+                    <h4 class="font-serif font-black text-lg text-gray-900 uppercase">Laporan Stunting Tahunan</h4>
+                </div>
+                <p class="text-xs font-mono font-bold text-neutral-500 mb-6 leading-relaxed">Rekapitulasi data prevalensi stunting dari seluruh kecamatan untuk tahun berjalan.</p>
             </div>
-        @endif
-        @if(session('error'))
-            <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
-                {{ session('error') }}
+            <div class="flex flex-wrap gap-2">
+                <a href="{{ route('laporan.generate', ['type' => 'stunting']) }}" class="px-4 py-2 border-2 border-[#171717] bg-blue-100 hover:bg-blue-200 font-mono font-black text-xs uppercase shadow-[2px_2px_0px_0px_#171717] transition-all">Lihat HTML</a>
+                <a href="{{ route('laporan.export.excel', ['type' => 'stunting']) }}" class="px-4 py-2 border-2 border-[#171717] bg-emerald-100 hover:bg-emerald-200 font-mono font-black text-xs uppercase shadow-[2px_2px_0px_0px_#171717] transition-all">Export Excel</a>
+                <a href="{{ route('laporan.export.pdf', ['type' => 'stunting']) }}" target="_blank" class="px-4 py-2 border-2 border-[#171717] bg-rose-100 hover:bg-rose-200 font-mono font-black text-xs uppercase shadow-[2px_2px_0px_0px_#171717] transition-all">Cetak PDF</a>
             </div>
-        @endif
-
-        <p class="text-gray-600 mb-6">Pilih jenis laporan yang ingin Anda generate atau unduh.</p>
+        </div>
         
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <!-- Card: Laporan Stunting -->
-            <div class="border rounded-lg p-5 hover:shadow-lg transition">
-                <h4 class="font-bold text-lg text-gray-800 mb-2">Laporan Stunting Tahunan</h4>
-                <p class="text-sm text-gray-500 mb-4">Rekapitulasi data prevalensi stunting dari seluruh kecamatan untuk tahun berjalan.</p>
-                <div class="flex gap-2">
-                    <a href="{{ route('laporan.generate', ['type' => 'stunting']) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm font-medium">Lihat HTML</a>
-                    <a href="{{ route('laporan.export.excel', ['type' => 'stunting']) }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm font-medium">Export Excel</a>
-                    <a href="{{ route('laporan.export.pdf', ['type' => 'stunting']) }}" target="_blank" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm font-medium">Cetak PDF</a>
+        <!-- Card: Laporan Penyakit -->
+        <div class="bg-white border-2 border-[#171717] p-6 shadow-[4px_4px_0px_0px_#171717] flex flex-col justify-between hover:shadow-[6px_6px_0px_0px_#171717] transition-all">
+            <div>
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="w-2 h-6 bg-red-400 border border-[#171717]"></span>
+                    <h4 class="font-serif font-black text-lg text-gray-900 uppercase">Laporan Wabah & Penyakit</h4>
                 </div>
+                <p class="text-xs font-mono font-bold text-neutral-500 mb-6 leading-relaxed">Rincian laporan persebaran 10 jenis penyakit terbanyak (Malaria, TB, Diare, dll).</p>
             </div>
-            
-            <!-- Card: Laporan Penyakit -->
-            <div class="border rounded-lg p-5 hover:shadow-lg transition">
-                <h4 class="font-bold text-lg text-gray-800 mb-2">Laporan Wabah & Penyakit</h4>
-                <p class="text-sm text-gray-500 mb-4">Rincian laporan persebaran 10 jenis penyakit terbanyak (Malaria, TB, Diare, dll).</p>
-                <div class="flex gap-2">
-                    <a href="{{ route('laporan.generate', ['type' => 'penyakit']) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm font-medium">Lihat HTML</a>
-                    <a href="{{ route('laporan.export.excel', ['type' => 'penyakit']) }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm font-medium">Export Excel</a>
-                    <a href="{{ route('laporan.export.pdf', ['type' => 'penyakit']) }}" target="_blank" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm font-medium">Cetak PDF</a>
+            <div class="flex flex-wrap gap-2">
+                <a href="{{ route('laporan.generate', ['type' => 'penyakit']) }}" class="px-4 py-2 border-2 border-[#171717] bg-blue-100 hover:bg-blue-200 font-mono font-black text-xs uppercase shadow-[2px_2px_0px_0px_#171717] transition-all">Lihat HTML</a>
+                <a href="{{ route('laporan.export.excel', ['type' => 'penyakit']) }}" class="px-4 py-2 border-2 border-[#171717] bg-emerald-100 hover:bg-emerald-200 font-mono font-black text-xs uppercase shadow-[2px_2px_0px_0px_#171717] transition-all">Export Excel</a>
+                <a href="{{ route('laporan.export.pdf', ['type' => 'penyakit']) }}" target="_blank" class="px-4 py-2 border-2 border-[#171717] bg-rose-100 hover:bg-rose-200 font-mono font-black text-xs uppercase shadow-[2px_2px_0px_0px_#171717] transition-all">Cetak PDF</a>
+            </div>
+        </div>
+        
+        <!-- Card: Laporan Fasilitas Kesehatan -->
+        <div class="bg-white border-2 border-[#171717] p-6 shadow-[4px_4px_0px_0px_#171717] flex flex-col justify-between hover:shadow-[6px_6px_0px_0px_#171717] transition-all">
+            <div>
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="w-2 h-6 bg-teal-400 border border-[#171717]"></span>
+                    <h4 class="font-serif font-black text-lg text-gray-900 uppercase">Laporan Fasilitas Kesehatan</h4>
                 </div>
+                <p class="text-xs font-mono font-bold text-neutral-500 mb-6 leading-relaxed">Daftar lengkap Puskesmas, Rumah Sakit, dan Klinik per kecamatan.</p>
             </div>
-            
-            <!-- Card: Laporan Fasilitas Kesehatan -->
-            <div class="border rounded-lg p-5 hover:shadow-lg transition">
-                <h4 class="font-bold text-lg text-gray-800 mb-2">Laporan Fasilitas Kesehatan</h4>
-                <p class="text-sm text-gray-500 mb-4">Daftar lengkap Puskesmas, Rumah Sakit, dan Klinik per kecamatan.</p>
-                <div class="flex gap-2">
-                    <a href="{{ route('laporan.generate', ['type' => 'faskes']) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm font-medium">Lihat HTML</a>
-                    <a href="{{ route('laporan.export.excel', ['type' => 'faskes']) }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm font-medium">Export Excel</a>
-                    <a href="{{ route('laporan.export.pdf', ['type' => 'faskes']) }}" target="_blank" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm font-medium">Cetak PDF</a>
-                </div>
+            <div class="flex flex-wrap gap-2">
+                <a href="{{ route('laporan.generate', ['type' => 'faskes']) }}" class="px-4 py-2 border-2 border-[#171717] bg-blue-100 hover:bg-blue-200 font-mono font-black text-xs uppercase shadow-[2px_2px_0px_0px_#171717] transition-all">Lihat HTML</a>
+                <a href="{{ route('laporan.export.excel', ['type' => 'faskes']) }}" class="px-4 py-2 border-2 border-[#171717] bg-emerald-100 hover:bg-emerald-200 font-mono font-black text-xs uppercase shadow-[2px_2px_0px_0px_#171717] transition-all">Export Excel</a>
+                <a href="{{ route('laporan.export.pdf', ['type' => 'faskes']) }}" target="_blank" class="px-4 py-2 border-2 border-[#171717] bg-rose-100 hover:bg-rose-200 font-mono font-black text-xs uppercase shadow-[2px_2px_0px_0px_#171717] transition-all">Cetak PDF</a>
             </div>
+        </div>
 
-            <!-- Card: Laporan Tenaga Kesehatan -->
-            <div class="border rounded-lg p-5 hover:shadow-lg transition">
-                <h4 class="font-bold text-lg text-gray-800 mb-2">Laporan Tenaga Kesehatan</h4>
-                <p class="text-sm text-gray-500 mb-4">Jumlah ketersediaan Dokter, Perawat, dan Bidan di berbagai jenjang puskesmas.</p>
-                <div class="flex gap-2">
-                    <a href="{{ route('laporan.generate', ['type' => 'nakes']) }}" class="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded text-sm font-medium">Lihat HTML</a>
-                    <a href="{{ route('laporan.export.excel', ['type' => 'nakes']) }}" class="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded text-sm font-medium">Export Excel</a>
-                    <a href="{{ route('laporan.export.pdf', ['type' => 'nakes']) }}" target="_blank" class="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded text-sm font-medium">Cetak PDF</a>
+        <!-- Card: Laporan Tenaga Kesehatan -->
+        <div class="bg-white border-2 border-[#171717] p-6 shadow-[4px_4px_0px_0px_#171717] flex flex-col justify-between hover:shadow-[6px_6px_0px_0px_#171717] transition-all">
+            <div>
+                <div class="flex items-center gap-2 mb-3">
+                    <span class="w-2 h-6 bg-cyan-400 border border-[#171717]"></span>
+                    <h4 class="font-serif font-black text-lg text-gray-900 uppercase">Laporan Tenaga Kesehatan</h4>
                 </div>
+                <p class="text-xs font-mono font-bold text-neutral-500 mb-6 leading-relaxed">Jumlah ketersediaan Dokter, Perawat, dan Bidan di berbagai jenjang puskesmas.</p>
+            </div>
+            <div class="flex flex-wrap gap-2">
+                <a href="{{ route('laporan.generate', ['type' => 'nakes']) }}" class="px-4 py-2 border-2 border-[#171717] bg-blue-100 hover:bg-blue-200 font-mono font-black text-xs uppercase shadow-[2px_2px_0px_0px_#171717] transition-all">Lihat HTML</a>
+                <a href="{{ route('laporan.export.excel', ['type' => 'nakes']) }}" class="px-4 py-2 border-2 border-[#171717] bg-emerald-100 hover:bg-emerald-200 font-mono font-black text-xs uppercase shadow-[2px_2px_0px_0px_#171717] transition-all">Export Excel</a>
+                <a href="{{ route('laporan.export.pdf', ['type' => 'nakes']) }}" target="_blank" class="px-4 py-2 border-2 border-[#171717] bg-rose-100 hover:bg-rose-200 font-mono font-black text-xs uppercase shadow-[2px_2px_0px_0px_#171717] transition-all">Cetak PDF</a>
             </div>
         </div>
     </div>

@@ -11,6 +11,7 @@ use App\Http\Controllers\ImunisasiController;
 use App\Http\Controllers\AnalisisController;
 use App\Http\Controllers\LaporanController;
 use App\Http\Controllers\PosyanduController;
+use App\Http\Controllers\SaranaKesehatanController;
 
 Route::get('/', function () {
     return redirect()->route('dashboard');
@@ -26,6 +27,7 @@ Route::resource('stunting', StuntingController::class);
 Route::resource('aki-akb', AKIAKBController::class);
 Route::resource('imunisasi', ImunisasiController::class);
 Route::resource('posyandu', PosyanduController::class);
+Route::resource('sarana-kesehatan', SaranaKesehatanController::class);
 
 // Analisis Routes
 Route::prefix('analisis')->name('analisis.')->group(function () {

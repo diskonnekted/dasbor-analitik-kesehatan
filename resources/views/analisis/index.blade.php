@@ -4,49 +4,86 @@
 @section('page-title', 'Menu Analisis Lanjutan')
 
 @section('content')
-<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-    <!-- Korelasi -->
-    <a href="{{ route('analisis.korelasi') }}" class="block bg-white rounded-lg shadow-md p-6 card-hover border-t-4 border-blue-500 text-center">
-        <div class="w-16 h-16 mx-auto bg-blue-100 rounded-full flex items-center justify-center mb-4">
-            <svg class="w-8 h-8 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 12l3-3 3 3 4-4M8 21l4-4 4 4M3 4h18M4 4h16v12a1 1 0 01-1 1H5a1 1 0 01-1-1V4z"></path>
-            </svg>
+<div class="space-y-8">
+    <!-- Hero Header Banner -->
+    <div class="bg-white border-2 border-[#171717] p-8 shadow-[4px_4px_0px_0px_#171717] flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div class="max-w-3xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#171717] text-white text-[10px] font-mono font-bold tracking-widest uppercase mb-4 border border-[#171717] shadow-[2px_2px_0px_0px_#171717]">
+                <i data-lucide="line-chart" class="w-3.5 h-3.5 text-red-400"></i>
+                Advanced Data Analytics
+            </div>
+            <h1 class="text-3xl font-serif font-black text-[#171717] uppercase tracking-tight mb-2">Pusat Analisis & Evaluasi</h1>
+            <p class="text-neutral-600 font-mono font-bold text-xs leading-relaxed">
+                Peralatan analisis kesehatan tingkat lanjut: Temukan pola tersembunyi, prediksi tren masa depan, dan lakukan klasterisasi spasial data prevalensi stunting di wilayah Kabupaten Banjarnegara menggunakan Python Analytics Engine.
+            </p>
         </div>
-        <h3 class="text-xl font-bold text-gray-900 mb-2">Analisis Korelasi</h3>
-        <p class="text-sm text-gray-600">Analisis hubungan statistik antar variabel kesehatan (seperti Faskes vs Stunting).</p>
-    </a>
+    </div>
 
-    <!-- Klastering -->
-    <a href="{{ route('analisis.klaster') }}" class="block bg-white rounded-lg shadow-md p-6 card-hover border-t-4 border-purple-500 text-center">
-        <div class="w-16 h-16 mx-auto bg-purple-100 rounded-full flex items-center justify-center mb-4">
-            <svg class="w-8 h-8 text-purple-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 002-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path>
-            </svg>
-        </div>
-        <h3 class="text-xl font-bold text-gray-900 mb-2">Pemetaan Klaster</h3>
-        <p class="text-sm text-gray-600">Pengelompokan wilayah berdasarkan tingkat kerawanan dan karakteristik kesehatan.</p>
-    </a>
+    <!-- Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        <!-- Korelasi -->
+        <a href="{{ route('analisis.korelasi') }}" 
+           class="group block bg-white border-2 border-[#171717] p-6 shadow-[4px_4px_0px_0px_#171717] hover:shadow-[6px_6px_0px_0px_#171717] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all text-center">
+            <div class="w-16 h-16 mx-auto bg-teal-100 border-2 border-[#171717] shadow-[2px_2px_0px_0px_#171717] flex items-center justify-center mb-5 group-hover:rotate-3 transition-transform">
+                <i data-lucide="git-merge" class="w-8 h-8 text-teal-700"></i>
+            </div>
+            <h3 class="text-lg font-serif font-black uppercase text-[#171717] mb-2 group-hover:underline">Analisis Korelasi</h3>
+            <p class="text-xs font-mono font-bold text-neutral-500 leading-relaxed">
+                Analisis hubungan statistik antar variabel kesehatan, seperti korelasi jumlah Nakes atau Faskes dengan prevalensi stunting.
+            </p>
+            <div class="mt-4 inline-flex items-center gap-1 text-[10px] font-mono font-bold uppercase text-teal-700 group-hover:underline">
+                <span>Buka Korelasi</span>
+                <i data-lucide="arrow-right" class="w-3 h-3"></i>
+            </div>
+        </a>
 
-    <!-- Prediksi -->
-    <a href="{{ route('analisis.prediksi') }}" class="block bg-white rounded-lg shadow-md p-6 card-hover border-t-4 border-orange-500 text-center">
-        <div class="w-16 h-16 mx-auto bg-orange-100 rounded-full flex items-center justify-center mb-4">
-            <svg class="w-8 h-8 text-orange-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path>
-            </svg>
-        </div>
-        <h3 class="text-xl font-bold text-gray-900 mb-2">Prediksi Tren</h3>
-        <p class="text-sm text-gray-600">Peramalan kasus penyakit atau stunting di masa mendatang menggunakan regresi.</p>
-    </a>
+        <!-- Klastering -->
+        <a href="{{ route('analisis.klaster') }}" 
+           class="group block bg-white border-2 border-[#171717] p-6 shadow-[4px_4px_0px_0px_#171717] hover:shadow-[6px_6px_0px_0px_#171717] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all text-center">
+            <div class="w-16 h-16 mx-auto bg-purple-100 border-2 border-[#171717] shadow-[2px_2px_0px_0px_#171717] flex items-center justify-center mb-5 group-hover:-rotate-3 transition-transform">
+                <i data-lucide="grid-3x3" class="w-8 h-8 text-purple-700"></i>
+            </div>
+            <h3 class="text-lg font-serif font-black uppercase text-[#171717] mb-2 group-hover:underline">Pemetaan Klaster</h3>
+            <p class="text-xs font-mono font-bold text-neutral-500 leading-relaxed">
+                Pengelompokan wilayah kecamatan berdasarkan tingkat kerawanan dan kemiripan data gizi buruk serta sarana kesehatan.
+            </p>
+            <div class="mt-4 inline-flex items-center gap-1 text-[10px] font-mono font-bold uppercase text-purple-700 group-hover:underline">
+                <span>Buka Klaster</span>
+                <i data-lucide="arrow-right" class="w-3 h-3"></i>
+            </div>
+        </a>
 
-    <!-- Spasial -->
-    <a href="{{ route('analisis.spasial') }}" class="block bg-white rounded-lg shadow-md p-6 card-hover border-t-4 border-green-500 text-center">
-        <div class="w-16 h-16 mx-auto bg-green-100 rounded-full flex items-center justify-center mb-4">
-            <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-            </svg>
-        </div>
-        <h3 class="text-xl font-bold text-gray-900 mb-2">Analisis Spasial</h3>
-        <p class="text-sm text-gray-600">Visualisasi data kesehatan secara geografis untuk melihat sebaran penyakit.</p>
-    </a>
+        <!-- Prediksi -->
+        <a href="{{ route('analisis.prediksi') }}" 
+           class="group block bg-white border-2 border-[#171717] p-6 shadow-[4px_4px_0px_0px_#171717] hover:shadow-[6px_6px_0px_0px_#171717] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all text-center">
+            <div class="w-16 h-16 mx-auto bg-amber-100 border-2 border-[#171717] shadow-[2px_2px_0px_0px_#171717] flex items-center justify-center mb-5 group-hover:rotate-6 transition-transform">
+                <i data-lucide="trending-up" class="w-8 h-8 text-amber-700"></i>
+            </div>
+            <h3 class="text-lg font-serif font-black uppercase text-[#171717] mb-2 group-hover:underline">Prediksi Tren</h3>
+            <p class="text-xs font-mono font-bold text-neutral-500 leading-relaxed">
+                Peramalan arah perkembangan prevalensi stunting 3 tahun ke depan menggunakan regresi linear time-series.
+            </p>
+            <div class="mt-4 inline-flex items-center gap-1 text-[10px] font-mono font-bold uppercase text-amber-700 group-hover:underline">
+                <span>Buka Prediksi</span>
+                <i data-lucide="arrow-right" class="w-3 h-3"></i>
+            </div>
+        </a>
+
+        <!-- Spasial -->
+        <a href="{{ route('analisis.spasial') }}" 
+           class="group block bg-white border-2 border-[#171717] p-6 shadow-[4px_4px_0px_0px_#171717] hover:shadow-[6px_6px_0px_0px_#171717] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all text-center">
+            <div class="w-16 h-16 mx-auto bg-emerald-100 border-2 border-[#171717] shadow-[2px_2px_0px_0px_#171717] flex items-center justify-center mb-5 group-hover:-rotate-6 transition-transform">
+                <i data-lucide="map" class="w-8 h-8 text-emerald-700"></i>
+            </div>
+            <h3 class="text-lg font-serif font-black uppercase text-[#171717] mb-2 group-hover:underline">Analisis Spasial</h3>
+            <p class="text-xs font-mono font-bold text-neutral-500 leading-relaxed">
+                Visualisasi data kesehatan secara geografis interaktif (GIS) untuk memetakan sebaran kasus stunting per kecamatan.
+            </p>
+            <div class="mt-4 inline-flex items-center gap-1 text-[10px] font-mono font-bold uppercase text-emerald-700 group-hover:underline">
+                <span>Buka Peta</span>
+                <i data-lucide="arrow-right" class="w-3 h-3"></i>
+            </div>
+        </a>
+    </div>
 </div>
 @endsection

@@ -11,6 +11,7 @@ use App\Models\AKI;
 use App\Models\AKB;
 use App\Models\Persalinan;
 use App\Models\Posyandu;
+use App\Models\SaranaKesehatan;
 use App\Models\PasienRawat;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\DB;
@@ -58,6 +59,11 @@ class OpenDataBanjarnegaraService
             'id' => 'jumlah-posyandu-dan-kadernya-di-kabupaten-banjarnegara',
             'resource_id' => '690b15ac-ec28-42ca-a866-4901b07800ef',
             'model' => Posyandu::class,
+        ],
+        'sarana_kesehatan' => [
+            'id' => 'jumlah-puskesmas-pembantu-puskesmas-keliling-apotek-toko-obat-dan-laboratorium',
+            'resource_id' => '52b6b818-bd49-40f1-83bc-cd4557b44d37',
+            'model' => SaranaKesehatan::class,
         ],
     ];
     
@@ -174,6 +180,8 @@ class OpenDataBanjarnegaraService
                 return $this->importPasienRawat($data);
             case 'posyandu':
                 return $this->importPosyandu($data);
+            case 'sarana_kesehatan':
+                return $this->importSaranaKesehatan($data);
             default:
                 return 0;
         }
@@ -439,6 +447,48 @@ class OpenDataBanjarnegaraService
                     [
                         'jumlah_posyandu' => $this->parseInt($row['Jumlah Posyandu']),
                         'jumlah_kader' => $this->parseInt($row['Jumlah Kader Posyandu']),
+                    ]
+                );
+                
+                $imported++;
+            }
+        });
+        
+        return $imported;
+    }
+    
+    /**
+     * Import Sarana Kesehatan
+     */
+    private function importSaranaKesehatan($data)
+    {
+        $imported = 0;
+        
+        DB::transaction(function () use ($data, &$imported) {
+            foreach ($data as $row) {
+                // Dataset Sarana Kesehatan tidak memiliki data Tahun.
+                // Kita akan asumsikan data ini untuk tahun 2024.
+                $tahun = 2024;
+                
+                // Pada dataset ini, areanya ditulis sebagai "Kecamatan", bukan "Puskesmas"
+                // Tetapi terkadang masih perlu normalisasi
+                $kecamatanName = trim($row['Kecamatan'] ?? '');
+                if (empty($kecamatanName)) continue;
+                
+                $kecamatan = $this->getKecamatanByPuskesmas($kecamatanName);
+                if (!$kecamatan) continue;
+                
+                SaranaKesehatan::updateOrCreate(
+                    [
+                        'kecamatan_id' => $kecamatan->id,
+                        'tahun' => $tahun,
+                    ],
+                    [
+                        'puskesmas_pembantu' => $this->parseInt($row['Puskesmas Pembantu'] ?? 0),
+                        'puskesmas_keliling' => $this->parseInt($row['Pusling'] ?? 0),
+                        'toko_obat' => $this->parseInt($row['Toko Obat'] ?? 0),
+                        'laborat' => $this->parseInt($row['Laborat'] ?? 0),
+                        'apotek' => $this->parseInt($row['Apotek'] ?? 0),
                     ]
                 );
                 

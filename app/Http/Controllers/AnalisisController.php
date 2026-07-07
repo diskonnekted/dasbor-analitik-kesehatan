@@ -12,7 +12,7 @@ use Illuminate\Support\Facades\Log;
 
 class AnalisisController extends Controller
 {
-    private $pythonApiUrl = 'http://127.0.0.1:8000';
+    private $pythonApiUrl = 'http://127.0.0.1:8001';
 
     public function index()
     {

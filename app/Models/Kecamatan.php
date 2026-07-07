@@ -12,4 +12,9 @@ class Kecamatan extends Model
     {
         return $this->hasMany(Posyandu::class);
     }
+
+    public function saranaKesehatans()
+    {
+        return $this->hasMany(SaranaKesehatan::class);
+    }
 }

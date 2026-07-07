@@ -4,85 +4,116 @@
 @section('page-title', 'Pemetaan Klaster Wilayah Stunting')
 
 @section('content')
-<div class="bg-white rounded-lg shadow-md p-6">
-    <div class="flex justify-between items-center mb-6">
-        <h3 class="text-lg font-bold text-gray-900">Hasil Klastering K-Means</h3>
-        <a href="{{ route('analisis.index') }}" class="text-sm text-red-600 hover:text-red-800">Kembali ke Menu</a>
+<div class="space-y-8">
+    <!-- Hero Header Banner -->
+    <div class="bg-white border-2 border-[#171717] p-8 shadow-[4px_4px_0px_0px_#171717] flex flex-col md:flex-row md:items-center justify-between gap-6">
+        <div class="max-w-3xl">
+            <div class="inline-flex items-center gap-2 px-3 py-1 bg-[#171717] text-white text-[10px] font-mono font-bold tracking-widest uppercase mb-4 border border-[#171717] shadow-[2px_2px_0px_0px_#171717]">
+                <i data-lucide="grid-3x3" class="w-3.5 h-3.5 text-purple-400"></i>
+                K-Means Clustering
+            </div>
+            <h1 class="text-3xl font-serif font-black text-[#171717] uppercase tracking-tight mb-2">Klastering Tingkat Kerawanan</h1>
+            <p class="text-neutral-600 font-mono font-bold text-xs leading-relaxed">
+                Mengelompokkan kecamatan secara otomatis berdasarkan kemiripan tingkat prevalensi stunting menggunakan algoritma K-Means Clustering dari Python Service.
+            </p>
+        </div>
+        
+        <a href="{{ route('analisis.index') }}" class="inline-flex items-center justify-center gap-2 px-5 py-3 bg-white text-[#171717] font-mono font-black uppercase text-xs border-2 border-[#171717] shadow-[2px_2px_0px_0px_#171717] hover:shadow-[4px_4px_0px_0px_#171717] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all self-start md:self-auto">
+            <i data-lucide="arrow-left" class="w-4 h-4"></i>
+            <span>Kembali ke Menu</span>
+        </a>
     </div>
 
-    <?php if ($status === 'success'): ?>
-        <p class="text-sm text-gray-600 mb-6">
-            Hasil pengelompokan (clustering) menggunakan algoritma K-Means melalui Python Service. Wilayah dikelompokkan berdasarkan tingkat kerawanan.
-        </p>
-        
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-            <div class="bg-red-50 border border-red-200 rounded-lg p-4 text-center">
-                <h4 class="font-bold text-red-800">Tinggi (Rawan)</h4>
-                <p class="text-2xl font-bold text-red-600 mt-2">
+    @if ($status === 'success')
+        <!-- Summary Cards Row -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <!-- Tinggi -->
+            <div class="bg-red-200 border-2 border-[#171717] p-6 shadow-[4px_4px_0px_0px_#171717] text-center flex flex-col items-center justify-center">
+                <div class="w-10 h-10 border-2 border-[#171717] bg-white rounded-none flex items-center justify-center mb-3 shadow-[2px_2px_0px_0px_#171717]">
+                    <i data-lucide="alert-octagon" class="w-6 h-6 text-red-600"></i>
+                </div>
+                <h4 class="font-serif font-black text-xs uppercase text-[#171717] tracking-wider">Tinggi (Rawan)</h4>
+                <p class="text-4xl font-mono font-black text-[#171717] mt-2">
                     {{ collect($clusters)->where('kerawanan', 'Tinggi')->count() }}
                 </p>
-                <p class="text-xs text-red-600 mt-1">Kecamatan</p>
+                <p class="text-[9px] font-mono font-bold text-neutral-600 uppercase tracking-wider mt-1">Kecamatan Terpengaruh</p>
             </div>
             
-            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-center">
-                <h4 class="font-bold text-yellow-800">Sedang (Waspada)</h4>
-                <p class="text-2xl font-bold text-yellow-600 mt-2">
+            <!-- Sedang -->
+            <div class="bg-amber-200 border-2 border-[#171717] p-6 shadow-[4px_4px_0px_0px_#171717] text-center flex flex-col items-center justify-center">
+                <div class="w-10 h-10 border-2 border-[#171717] bg-white rounded-none flex items-center justify-center mb-3 shadow-[2px_2px_0px_0px_#171717]">
+                    <i data-lucide="alert-triangle" class="w-6 h-6 text-amber-600"></i>
+                </div>
+                <h4 class="font-serif font-black text-xs uppercase text-[#171717] tracking-wider">Sedang (Waspada)</h4>
+                <p class="text-4xl font-mono font-black text-[#171717] mt-2">
                     {{ collect($clusters)->where('kerawanan', 'Sedang')->count() }}
                 </p>
-                <p class="text-xs text-yellow-600 mt-1">Kecamatan</p>
+                <p class="text-[9px] font-mono font-bold text-neutral-600 uppercase tracking-wider mt-1">Kecamatan Terpengaruh</p>
             </div>
             
-            <div class="bg-green-50 border border-green-200 rounded-lg p-4 text-center">
-                <h4 class="font-bold text-green-800">Rendah (Aman)</h4>
-                <p class="text-2xl font-bold text-green-600 mt-2">
+            <!-- Rendah -->
+            <div class="bg-emerald-200 border-2 border-[#171717] p-6 shadow-[4px_4px_0px_0px_#171717] text-center flex flex-col items-center justify-center">
+                <div class="w-10 h-10 border-2 border-[#171717] bg-white rounded-none flex items-center justify-center mb-3 shadow-[2px_2px_0px_0px_#171717]">
+                    <i data-lucide="shield-alert" class="w-6 h-6 text-emerald-600"></i>
+                </div>
+                <h4 class="font-serif font-black text-xs uppercase text-[#171717] tracking-wider">Rendah (Aman)</h4>
+                <p class="text-4xl font-mono font-black text-[#171717] mt-2">
                     {{ collect($clusters)->where('kerawanan', 'Rendah')->count() }}
                 </p>
-                <p class="text-xs text-green-600 mt-1">Kecamatan</p>
+                <p class="text-[9px] font-mono font-bold text-neutral-600 uppercase tracking-wider mt-1">Kecamatan Terpengaruh</p>
             </div>
         </div>
 
-        <div class="overflow-x-auto">
-            <table class="min-w-full divide-y divide-gray-200">
-                <thead class="bg-gray-50">
-                    <tr>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Kecamatan</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Prevalensi Stunting (%)</th>
-                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Tingkat Kerawanan</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white divide-y divide-gray-200">
-                    <?php foreach ($clusters as $cluster): ?>
-                    <tr>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-900">{{ $cluster['nama'] }}</td>
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">{{ number_format($cluster['stunting'], 2) }}%</td>
-                        <td class="px-6 py-4 whitespace-nowrap">
-                            <?php if ($cluster['kerawanan'] == 'Tinggi'): ?>
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-red-100 text-red-800">Tinggi</span>
-                            <?php elseif ($cluster['kerawanan'] == 'Sedang'): ?>
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Sedang</span>
-                            <?php else: ?>
-                                <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Rendah</span>
-                            <?php endif; ?>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-    <?php else: ?>
-        <div class="bg-red-50 border-l-4 border-red-500 p-4 rounded-md">
-            <div class="flex">
-                <div class="flex-shrink-0">
-                    <!-- Icon -->
-                </div>
-                <div class="ml-3">
-                    <h3 class="text-sm font-medium text-red-800">Gagal Memuat Klastering</h3>
-                    <div class="mt-2 text-sm text-red-700">
-                        <p>{{ $message }}</p>
-                    </div>
-                </div>
+        <!-- Clustering Table Container -->
+        <div class="bg-white border-2 border-[#171717] p-6 shadow-[4px_4px_0px_0px_#171717]">
+            <h2 class="text-sm font-serif font-black uppercase tracking-widest text-[#171717] mb-6 flex items-center gap-2 border-b-2 border-[#171717] pb-2">
+                <i data-lucide="list" class="w-4 h-4 text-purple-600"></i>
+                Daftar Hasil Pembagian Wilayah
+            </h2>
+
+            <div class="overflow-x-auto">
+                <table class="w-full border-collapse border-2 border-[#171717] text-left text-xs font-mono font-bold">
+                    <thead>
+                        <tr class="bg-[#f4f4f0] border-b-2 border-[#171717]">
+                            <th class="px-6 py-4 border-r-2 border-[#171717] uppercase tracking-wider">Nama Kecamatan</th>
+                            <th class="px-6 py-4 border-r-2 border-[#171717] uppercase tracking-wider text-center">Prevalensi Stunting</th>
+                            <th class="px-6 py-4 uppercase tracking-wider">Tingkat Kerawanan</th>
+                        </tr>
+                    </thead>
+                    <tbody class="divide-y-2 divide-[#171717]">
+                        @foreach ($clusters as $cluster)
+                            <tr class="hover:bg-neutral-50 transition-colors">
+                                <td class="px-6 py-4 border-r-2 border-[#171717] uppercase">{{ $cluster['nama'] }}</td>
+                                <td class="px-6 py-4 border-r-2 border-[#171717] text-center font-black text-sm">{{ number_format($cluster['stunting'], 2) }}%</td>
+                                <td class="px-6 py-4">
+                                    @if ($cluster['kerawanan'] == 'Tinggi')
+                                        <span class="inline-block px-3 py-1 bg-red-200 border-2 border-[#171717] text-red-950 font-black shadow-[1px_1px_0px_0px_#171717]">
+                                            TINGGI
+                                        </span>
+                                    @elseif ($cluster['kerawanan'] == 'Sedang')
+                                        <span class="inline-block px-3 py-1 bg-amber-200 border-2 border-[#171717] text-amber-950 font-black shadow-[1px_1px_0px_0px_#171717]">
+                                            SEDANG
+                                        </span>
+                                    @else
+                                        <span class="inline-block px-3 py-1 bg-emerald-200 border-2 border-[#171717] text-emerald-950 font-black shadow-[1px_1px_0px_0px_#171717]">
+                                            RENDAH
+                                        </span>
+                                    @endif
+                                </td>
+                            </tr>
+                        @endforeach
+                    </tbody>
+                </table>
             </div>
         </div>
-    <?php endif; ?>
+    @else
+        <div class="bg-red-100 border-2 border-[#171717] shadow-[4px_4px_0px_0px_#171717] p-6 font-mono">
+            <div class="flex items-center gap-3 text-red-800 font-bold mb-2">
+                <i data-lucide="alert-triangle" class="w-5 h-5"></i>
+                <h3>Gagal Memuat Analisis Klastering</h3>
+            </div>
+            <p class="text-sm text-red-700">{{ $message }}</p>
+        </div>
+    @endif
 </div>
 @endsection

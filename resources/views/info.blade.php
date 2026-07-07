@@ -4,137 +4,138 @@
 @section('page-title', 'Informasi Sistem')
 
 @section('content')
-<div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-    <!-- Header Section -->
-    <div class="bg-gradient-to-r from-blue-800 to-blue-600 px-8 py-10 text-white flex flex-col items-center justify-center text-center">
-        <img src="{{ asset('assets/jdn_logo.png') }}" alt="Logo Jaga Data Nusantara" class="h-28 w-auto mb-6 bg-white p-2 rounded-full shadow-lg">
-        <h2 class="text-3xl font-bold mb-2">Jaga Data Nusantara (JDN)</h2>
-        <p class="text-blue-100 max-w-2xl mx-auto text-lg">Organisasi nirlaba yang berdedikasi untuk mewujudkan tata kelola data publik yang transparan, akurat, dan berdampak bagi kemajuan daerah di Indonesia.</p>
+<div class="space-y-8">
+    <!-- Header Section (Neo-Brutalist) -->
+    <div class="bg-blue-100 border-2 border-[#171717] p-8 shadow-[4px_4px_0px_0px_#171717] flex flex-col md:flex-row items-center justify-between gap-8">
+        <div class="flex items-center gap-4 flex-wrap md:flex-nowrap">
+            <img src="{{ asset('assets/jdn_logo.png') }}" alt="Logo Jaga Data Nusantara" class="h-20 w-auto bg-white p-2 border-2 border-[#171717] shadow-[2px_2px_0px_0px_#171717]">
+            <div>
+                <h2 class="text-3xl font-serif font-black text-[#171717] uppercase tracking-tight">Jaga Data Nusantara (JDN)</h2>
+                <p class="text-xs font-mono font-bold text-neutral-600 mt-2 max-w-2xl">
+                    Organisasi nirlaba yang berdedikasi untuk mewujudkan tata kelola data publik yang transparan, akurat, dan berdampak bagi kemajuan daerah di Indonesia.
+                </p>
+            </div>
+        </div>
     </div>
 
     <!-- Content Section -->
-    <div class="p-8">
-        
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-10">
-            <!-- Left Column -->
-            <div class="space-y-8">
-                <div>
-                    <h3 class="text-xl font-bold text-gray-900 border-b pb-2 mb-4 flex items-center">
-                        <i class="fas fa-handshake text-blue-600 mr-3"></i> Dukungan untuk Banjarnegara
-                    </h3>
-                    <p class="text-gray-600 leading-relaxed text-justify">
-                        Sistem Informasi Manajemen Kesehatan ini dikembangkan secara sukarela oleh <strong>Jaga Data Nusantara (JDN)</strong> sebagai wujud dukungan teknologi kepada Pemerintah Kabupaten Banjarnegara. 
-                        Aplikasi ini merupakan modul perdana dari purwarupa <strong>Dasbor Super Analitik</strong> skala penuh yang sedang kami kembangkan, di mana ke depannya akan mencakup seluruh sektor strategis daerah (Pendidikan, Ekonomi, Infrastruktur, dll).
-                    </p>
-                </div>
-
-                <div>
-                    <h3 class="text-xl font-bold text-gray-900 border-b pb-2 mb-4 flex items-center">
-                        <i class="fas fa-database text-blue-600 mr-3"></i> Sumber Data Terbuka
-                    </h3>
-                    <div class="bg-blue-50 border-l-4 border-blue-500 p-4 rounded text-gray-700">
-                        Seluruh data primer yang ditampilkan pada modul ini ditarik, disinkronisasi, dan diverifikasi secara langsung dari ekosistem <strong>API OpenData Banjarnegara</strong>. Integrasi dua arah ini memastikan data yang tersaji selalu mutakhir dan sejalan dengan rilis resmi pemerintah.
-                    </div>
-                </div>
-            </div>
-
-            <!-- Right Column -->
-            <div>
-                <h3 class="text-xl font-bold text-gray-900 border-b pb-2 mb-4 flex items-center">
-                    <i class="fas fa-chart-network text-blue-600 mr-3"></i> Metodologi Analisis
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Left Column -->
+        <div class="space-y-8">
+            <div class="bg-white border-2 border-[#171717] p-6 shadow-[4px_4px_0px_0px_#171717]">
+                <h3 class="text-sm font-serif font-black uppercase tracking-widest text-[#171717] mb-4 flex items-center gap-2 border-b-2 border-[#171717] pb-2">
+                    <i data-lucide="handshake" class="w-4.5 h-4.5 text-blue-600"></i> Dukungan untuk Banjarnegara
                 </h3>
-                <p class="text-gray-600 mb-4">Aplikasi ini tidak sekadar menampilkan tabel data mentah, melainkan memprosesnya melalui berbagai lapisan analitik prediktif dan komparatif:</p>
+                <p class="text-xs font-mono font-bold text-neutral-600 leading-relaxed text-justify">
+                    Sistem Informasi Manajemen Kesehatan ini dikembangkan secara sukarela oleh <strong>Jaga Data Nusantara (JDN)</strong> sebagai wujud dukungan teknologi kepada Pemerintah Kabupaten Banjarnegara. 
+                    Aplikasi ini merupakan modul perdana dari purwarupa <strong>Dasbor Super Analitik</strong> skala penuh yang sedang kami kembangkan, di mana ke depannya akan mencakup seluruh sektor strategis daerah (Pendidikan, Ekonomi, Infrastruktur, dll).
+                </p>
+            </div>
+
+            <div class="bg-teal-50 border-2 border-[#171717] p-6 shadow-[4px_4px_0px_0px_#171717]">
+                <h3 class="text-sm font-serif font-black uppercase tracking-widest text-teal-950 mb-4 flex items-center gap-2 border-b-2 border-[#171717] pb-2">
+                    <i data-lucide="database" class="w-4.5 h-4.5 text-teal-700"></i> Sumber Data Terbuka
+                </h3>
+                <p class="text-xs font-mono font-bold text-teal-900 leading-relaxed">
+                    Seluruh data primer yang ditampilkan pada modul ini ditarik, disinkronisasi, dan diverifikasi secara langsung dari ekosistem <strong>API OpenData Banjarnegara</strong>. Integrasi dua arah ini memastikan data yang tersaji selalu mutakhir dan sejalan dengan rilis resmi pemerintah.
+                </p>
+            </div>
+        </div>
+
+        <!-- Right Column -->
+        <div class="bg-white border-2 border-[#171717] p-6 shadow-[4px_4px_0px_0px_#171717]">
+            <h3 class="text-sm font-serif font-black uppercase tracking-widest text-[#171717] mb-6 flex items-center gap-2 border-b-2 border-[#171717] pb-2">
+                <i data-lucide="network" class="w-4.5 h-4.5 text-purple-600"></i> Metodologi Analisis
+            </h3>
+            
+            <ul class="space-y-5 font-mono font-bold text-xs">
+                <li class="flex items-start gap-3">
+                    <div class="w-8 h-8 border-2 border-[#171717] bg-green-100 flex items-center justify-center flex-shrink-0 shadow-[1px_1px_0px_0px_#171717]">
+                        <i data-lucide="map-pin" class="w-4 h-4 text-green-700"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-serif font-black uppercase text-[11px] text-[#171717]">Analisis Spasial (Choropleth)</h4>
+                        <p class="text-[10px] text-neutral-500 mt-1">Pemetaan geografis berbasis poligon GeoJSON untuk memvisualisasikan zonasi prevalensi stunting per kecamatan.</p>
+                    </div>
+                </li>
                 
-                <ul class="space-y-4 mt-4">
-                    <li class="flex items-start">
-                        <div class="flex-shrink-0 mt-1">
-                            <span class="flex items-center justify-center h-6 w-6 rounded-full bg-green-100 text-green-600">
-                                <i class="fas fa-map-marked-alt text-xs"></i>
-                            </span>
-                        </div>
-                        <div class="ml-3">
-                            <h4 class="text-md font-semibold text-gray-900">Analisis Spasial (Choropleth Mapping)</h4>
-                            <p class="text-sm text-gray-600">Pemetaan geografis berbasis poligon GeoJSON untuk memvisualisasikan zonasi tingkat keparahan (merah/kuning/hijau) di tingkat kecamatan.</p>
-                        </div>
-                    </li>
-                    <li class="flex items-start">
-                        <div class="flex-shrink-0 mt-1">
-                            <span class="flex items-center justify-center h-6 w-6 rounded-full bg-blue-100 text-blue-600">
-                                <i class="fas fa-chart-line text-xs"></i>
-                            </span>
-                        </div>
-                        <div class="ml-3">
-                            <h4 class="text-md font-semibold text-gray-900">Time-Series Growth Trend</h4>
-                            <p class="text-sm text-gray-600">Komparasi data historis antar tahun untuk menghasilkan persentase lonjakan (Growth) maupun penurunan kasus secara presisi.</p>
-                        </div>
-                    </li>
-                    <li class="flex items-start">
-                        <div class="flex-shrink-0 mt-1">
-                            <span class="flex items-center justify-center h-6 w-6 rounded-full bg-yellow-100 text-yellow-600">
-                                <i class="fas fa-tachometer-alt text-xs"></i>
-                            </span>
-                        </div>
-                        <div class="ml-3">
-                            <h4 class="text-md font-semibold text-gray-900">Key Performance Indicator (KPI)</h4>
-                            <p class="text-sm text-gray-600">Agregasi cerdas untuk menghitung metrik kompleks seperti Angka Kematian Ibu/Bayi (per 100.000 kelahiran) dan rasio tenaga medis terhadap populasi.</p>
-                        </div>
-                    </li>
-                </ul>
-            </div>
+                <li class="flex items-start gap-3">
+                    <div class="w-8 h-8 border-2 border-[#171717] bg-blue-100 flex items-center justify-center flex-shrink-0 shadow-[1px_1px_0px_0px_#171717]">
+                        <i data-lucide="trending-up" class="w-4 h-4 text-blue-700"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-serif font-black uppercase text-[11px] text-[#171717]">Time-Series Growth Trend</h4>
+                        <p class="text-[10px] text-neutral-500 mt-1">Komparasi data historis antar tahun untuk menghasilkan persentase lonjakan (Growth) maupun penurunan kasus secara presisi.</p>
+                    </div>
+                </li>
+                
+                <li class="flex items-start gap-3">
+                    <div class="w-8 h-8 border-2 border-[#171717] bg-yellow-100 flex items-center justify-center flex-shrink-0 shadow-[1px_1px_0px_0px_#171717]">
+                        <i data-lucide="check-square" class="w-4 h-4 text-yellow-700"></i>
+                    </div>
+                    <div>
+                        <h4 class="font-serif font-black uppercase text-[11px] text-[#171717]">Key Performance Indicator (KPI)</h4>
+                        <p class="text-[10px] text-neutral-500 mt-1">Agregasi cerdas untuk menghitung metrik kompleks seperti rasio ketersediaan dokter/bidan terhadap 100.000 penduduk secara *real-time*.</p>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+
+    <!-- Future Roadmap Section -->
+    <div class="bg-white border-2 border-[#171717] p-8 shadow-[4px_4px_0px_0px_#171717]">
+        <div class="text-center mb-8 border-b-2 border-dashed border-[#171717] pb-6">
+            <span class="inline-block px-3 py-1 bg-purple-200 border-2 border-[#171717] font-mono font-black text-xs uppercase shadow-[2px_2px_0px_0px_#171717]">
+                Peta Jalan JDN
+            </span>
+            <h3 class="text-2xl font-serif font-black text-[#171717] uppercase mt-3">Pengembangan Analitik Masa Depan</h3>
+            <p class="text-neutral-500 font-mono font-bold text-xs mt-1">Sistem pendukung keputusan komprehensif fase R&D untuk rilis berikutnya:</p>
         </div>
 
-        <!-- Future Roadmap Section -->
-        <div class="mt-12 bg-white border border-gray-200 rounded-lg shadow-sm p-8">
-            <div class="text-center mb-8">
-                <span class="bg-blue-100 text-blue-800 text-xs font-semibold px-3 py-1 rounded-full uppercase tracking-wider">Peta Jalan JDN</span>
-                <h3 class="text-2xl font-bold text-gray-900 mt-3">Pengembangan Analitik Masa Depan</h3>
-                <p class="text-gray-600 mt-2 max-w-2xl mx-auto">Visi kami membangun <strong>Dasbor Super Analitik</strong> tidak berhenti di pemetaan dasar. Berikut adalah fase analitik tingkat lanjut yang sedang dalam tahap pengembangan (R&D) untuk rilis berikutnya:</p>
-            </div>
-
-            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
-                <!-- Predictive Analytics -->
-                <div class="bg-gray-50 rounded-lg p-5 border border-gray-100 hover:border-blue-300 transition">
-                    <div class="h-10 w-10 rounded bg-indigo-100 text-indigo-600 flex items-center justify-center mb-4">
-                        <i class="fas fa-brain"></i>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 font-mono font-bold text-xs">
+            <!-- ML -->
+            <div class="bg-neutral-50 border-2 border-[#171717] p-5 shadow-[3px_3px_0px_0px_#171717] flex flex-col justify-between hover:shadow-[4px_4px_0px_0px_#171717] transition-all">
+                <div>
+                    <div class="w-9 h-9 border-2 border-[#171717] bg-indigo-100 flex items-center justify-center mb-4 shadow-[1.5px_1.5px_0px_0px_#171717]">
+                        <i data-lucide="brain" class="w-5 h-5 text-indigo-700"></i>
                     </div>
-                    <h4 class="font-bold text-gray-900 mb-2">Predictive Analytics (AI)</h4>
-                    <p class="text-sm text-gray-600">Pemanfaatan <em>Machine Learning</em> untuk meramalkan potensi wabah penyakit (seperti DBD) beberapa bulan ke depan berdasarkan pola historis iklim dan curah hujan.</p>
-                </div>
-
-                <!-- Cross-Sector Correlation -->
-                <div class="bg-gray-50 rounded-lg p-5 border border-gray-100 hover:border-blue-300 transition">
-                    <div class="h-10 w-10 rounded bg-purple-100 text-purple-600 flex items-center justify-center mb-4">
-                        <i class="fas fa-project-diagram"></i>
-                    </div>
-                    <h4 class="font-bold text-gray-900 mb-2">Analisis Korelasi Silang</h4>
-                    <p class="text-sm text-gray-600">Mengawinkan data lintas instansi. Contoh: Mencari benang merah antara wilayah dengan infrastruktur air bersih buruk (Dinas PU) terhadap lonjakan angka Stunting (Dinkes).</p>
-                </div>
-
-                <!-- Sentiment Analysis -->
-                <div class="bg-gray-50 rounded-lg p-5 border border-gray-100 hover:border-blue-300 transition">
-                    <div class="h-10 w-10 rounded bg-pink-100 text-pink-600 flex items-center justify-center mb-4">
-                        <i class="fas fa-comments"></i>
-                    </div>
-                    <h4 class="font-bold text-gray-900 mb-2">Natural Language Processing</h4>
-                    <p class="text-sm text-gray-600">Analisis Sentimen otomatis untuk mengukur Indeks Kepuasan Masyarakat terhadap layanan tiap Puskesmas secara <em>real-time</em> dari portal aduan publik.</p>
-                </div>
-
-                <!-- Prescriptive Analytics -->
-                <div class="bg-gray-50 rounded-lg p-5 border border-gray-100 hover:border-blue-300 transition">
-                    <div class="h-10 w-10 rounded bg-teal-100 text-teal-600 flex items-center justify-center mb-4">
-                        <i class="fas fa-balance-scale"></i>
-                    </div>
-                    <h4 class="font-bold text-gray-900 mb-2">Prescriptive Analytics</h4>
-                    <p class="text-sm text-gray-600">Sistem pendukung keputusan yang menyarankan skenario intervensi terbaik, seperti otomatisasi rekomendasi relokasi tenaga medis ke zona merah krisis nakes.</p>
+                    <h4 class="font-serif font-black uppercase text-[#171717] mb-2 leading-tight">Predictive AI</h4>
+                    <p class="text-[10px] text-neutral-500 leading-relaxed">Peramalan potensi wabah penyakit menular (seperti DBD) beberapa bulan ke depan berdasarkan pola iklim & curah hujan.</p>
                 </div>
             </div>
-        </div>
 
-        <div class="mt-12 text-center border-t pt-6">
-            <p class="text-gray-500 text-sm">
-                &copy; {{ date('Y') }} Jaga Data Nusantara (JDN). Hak Cipta Dilindungi.<br>
-                <em>Dibangun dengan dedikasi untuk Banjarnegara yang lebih baik.</em>
-            </p>
+            <!-- Correlation -->
+            <div class="bg-neutral-50 border-2 border-[#171717] p-5 shadow-[3px_3px_0px_0px_#171717] flex flex-col justify-between hover:shadow-[4px_4px_0px_0px_#171717] transition-all">
+                <div>
+                    <div class="w-9 h-9 border-2 border-[#171717] bg-purple-100 flex items-center justify-center mb-4 shadow-[1.5px_1.5px_0px_0px_#171717]">
+                        <i data-lucide="git-merge" class="w-5 h-5 text-purple-700"></i>
+                    </div>
+                    <h4 class="font-serif font-black uppercase text-[#171717] mb-2 leading-tight">Korelasi Silang</h4>
+                    <p class="text-[10px] text-neutral-500 leading-relaxed">Menggabungkan data spasial akses air bersih (Dinas PU) terhadap tingkat kerawanan stunting (Dinas Kesehatan).</p>
+                </div>
+            </div>
+
+            <!-- NLP -->
+            <div class="bg-neutral-50 border-2 border-[#171717] p-5 shadow-[3px_3px_0px_0px_#171717] flex flex-col justify-between hover:shadow-[4px_4px_0px_0px_#171717] transition-all">
+                <div>
+                    <div class="w-9 h-9 border-2 border-[#171717] bg-rose-100 flex items-center justify-center mb-4 shadow-[1.5px_1.5px_0px_0px_#171717]">
+                        <i data-lucide="message-square" class="w-5 h-5 text-rose-700"></i>
+                    </div>
+                    <h4 class="font-serif font-black uppercase text-[#171717] mb-2 leading-tight">Sentimen NLP</h4>
+                    <p class="text-[10px] text-neutral-500 leading-relaxed">Analisis sentimen otomatis tingkat kepuasan layanan puskesmas dari portal aduan masyarakat Pemkab.</p>
+                </div>
+            </div>
+
+            <!-- Prescriptive -->
+            <div class="bg-neutral-50 border-2 border-[#171717] p-5 shadow-[3px_3px_0px_0px_#171717] flex flex-col justify-between hover:shadow-[4px_4px_0px_0px_#171717] transition-all">
+                <div>
+                    <div class="w-9 h-9 border-2 border-[#171717] bg-teal-100 flex items-center justify-center mb-4 shadow-[1.5px_1.5px_0px_0px_#171717]">
+                        <i data-lucide="scale" class="w-5 h-5 text-teal-700"></i>
+                    </div>
+                    <h4 class="font-serif font-black uppercase text-[#171717] mb-2 leading-tight">Prescriptive AI</h4>
+                    <p class="text-[10px] text-neutral-500 leading-relaxed">Rekomendasi otomatis relokasi atau penambahan kuota dokter/bidan ke puskesmas di zona merah krisis nakes.</p>
+                </div>
+            </div>
         </div>
     </div>
 </div>

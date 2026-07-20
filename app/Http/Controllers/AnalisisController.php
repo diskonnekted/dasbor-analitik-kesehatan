@@ -14,7 +14,12 @@ use Illuminate\Support\Facades\DB;
 
 class AnalisisController extends Controller
 {
-    private $pythonApiUrl = 'http://127.0.0.1:8001';
+    private $pythonApiUrl;
+
+    public function __construct()
+    {
+        $this->pythonApiUrl = rtrim(config('services.analytics.url'), '/');
+    }
 
     public function index()
     {

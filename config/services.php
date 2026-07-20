@@ -35,4 +35,9 @@ return [
         ],
     ],
 
+    // Python FastAPI analytics service (korelasi, klaster, prediksi)
+    'analytics' => [
+        'url' => env('ANALYTICS_SERVICE_URL', 'http://127.0.0.1:8001'),
+    ],
+
 ];

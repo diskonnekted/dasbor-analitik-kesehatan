@@ -8,17 +8,16 @@ use App\Models\Faskes;
 use App\Models\Stunting;
 use App\Models\TenagaKesehatan;
 use App\Models\KasusPenyakit;
-use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Log;
+use App\Services\AnalyticsService;
 use Illuminate\Support\Facades\DB;
 
 class AnalisisController extends Controller
 {
-    private $pythonApiUrl;
+    private AnalyticsService $analytics;
 
-    public function __construct()
+    public function __construct(AnalyticsService $analytics)
     {
-        $this->pythonApiUrl = rtrim(config('services.analytics.url'), '/');
+        $this->analytics = $analytics;
     }
 
     public function index()
@@ -29,63 +28,39 @@ class AnalisisController extends Controller
     public function korelasi()
     {
         $data = $this->getKecamatanDataForAnalysis();
+        $result = $this->analytics->correlation($data);
 
-        try {
-            $response = Http::post("{$this->pythonApiUrl}/analyze/correlation", [
+        if ($result['status'] === 'success') {
+            return view('analisis.korelasi', [
+                'status' => 'success',
+                'results' => $result['results'],
+                'sample_size' => $result['sample_size'],
                 'data' => $data
             ]);
-
-            if ($response->successful()) {
-                $result = $response->json();
-                return view('analisis.korelasi', [
-                    'status' => 'success',
-                    'results' => $result['results'],
-                    'sample_size' => $result['sample_size'],
-                    'data' => $data
-                ]);
-            } else {
-                Log::error('Python API Error: ' . $response->body());
-                return view('analisis.korelasi', [
-                    'status' => 'error',
-                    'message' => 'Gagal terhubung ke service analitik. (Code: ' . $response->status() . ')'
-                ]);
-            }
-        } catch (\Exception $e) {
-            Log::error('Python API Exception: ' . $e->getMessage());
-            return view('analisis.korelasi', [
-                'status' => 'error',
-                'message' => 'Service analitik tidak berjalan atau tidak dapat dijangkau.'
-            ]);
         }
+
+        return view('analisis.korelasi', [
+            'status' => 'error',
+            'message' => $result['message'] ?? 'Gagal memproses analisis korelasi.'
+        ]);
     }
 
     public function klaster()
     {
         $data = $this->getKecamatanDataForAnalysis();
+        $result = $this->analytics->cluster($data);
 
-        try {
-            $response = Http::post("{$this->pythonApiUrl}/analyze/cluster", [
-                'data' => $data
-            ]);
-
-            if ($response->successful()) {
-                $result = $response->json();
-                return view('analisis.klaster', [
-                    'status' => 'success',
-                    'clusters' => $result['clusters']
-                ]);
-            } else {
-                return view('analisis.klaster', [
-                    'status' => 'error',
-                    'message' => 'Gagal memproses klastering data.'
-                ]);
-            }
-        } catch (\Exception $e) {
+        if ($result['status'] === 'success') {
             return view('analisis.klaster', [
-                'status' => 'error',
-                'message' => 'Service analitik tidak berjalan.'
+                'status' => 'success',
+                'clusters' => $result['clusters']
             ]);
         }
+
+        return view('analisis.klaster', [
+            'status' => 'error',
+            'message' => $result['message'] ?? 'Gagal memproses klastering data.'
+        ]);
     }
 
     public function prediksi()
@@ -105,33 +80,22 @@ class AnalisisController extends Controller
             })
             ->toArray();
 
-        try {
-            $response = Http::post("{$this->pythonApiUrl}/analyze/predict", [
-                'data' => $historical,
-                'years_ahead' => 3
-            ]);
+        $result = $this->analytics->predict($historical, 3);
 
-            if ($response->successful() && isset($response->json()['historical'])) {
-                $result = $response->json();
-                return view('analisis.prediksi', [
-                    'status' => 'success',
-                    'historical' => $result['historical'],
-                    'forecast' => $result['forecast'],
-                    'trend' => $result['trend'],
-                    'slope' => $result['slope']
-                ]);
-            } else {
-                return view('analisis.prediksi', [
-                    'status' => 'error',
-                    'message' => 'Gagal memproses prediksi data.'
-                ]);
-            }
-        } catch (\Exception $e) {
+        if ($result['status'] === 'success') {
             return view('analisis.prediksi', [
-                'status' => 'error',
-                'message' => 'Service analitik tidak berjalan.'
+                'status' => 'success',
+                'historical' => $result['historical'],
+                'forecast' => $result['forecast'],
+                'trend' => $result['trend'],
+                'slope' => $result['slope']
             ]);
         }
+
+        return view('analisis.prediksi', [
+            'status' => 'error',
+            'message' => $result['message'] ?? 'Gagal memproses prediksi data.'
+        ]);
     }
 
     public function spasial()

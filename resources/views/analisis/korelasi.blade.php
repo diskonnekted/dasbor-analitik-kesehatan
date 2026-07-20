@@ -122,11 +122,13 @@
     document.addEventListener('DOMContentLoaded', function() {
         const data = @json($data);
         
-        // Scatter Plot Nakes vs Stunting
+        // Scatter Plot Kepadatan Nakes (per 1.000 penduduk) vs Stunting
         const scatterData = data.map(item => ({
             x: item.nakes,
             y: item.stunting,
-            kecamatan: item.nama
+            kecamatan: item.nama,
+            nakesAbsolut: item.nakes_absolut,
+            penduduk: item.penduduk
         }));
         
         const ctx = document.getElementById('scatterChart').getContext('2d');
@@ -160,7 +162,7 @@
                         callbacks: {
                             label: function(context) {
                                 const point = context.raw;
-                                return ` Kecamatan ${point.kecamatan} | Nakes: ${point.x} | Stunting: ${point.y}%`;
+                                return ` Kecamatan ${point.kecamatan} | Nakes/1000: ${point.x} (${point.nakesAbsolut} nakes) | Stunting: ${point.y}%`;
                             }
                         }
                     }
@@ -171,7 +173,7 @@
                         border: { width: 2, color: '#171717' },
                         title: { 
                             display: true, 
-                            text: 'JUMLAH TENAGA KESEHATAN', 
+                            text: 'KEPADATAN NAKES (PER 1.000 PENDUDUK)', 
                             font: { family: 'Courier New', weight: 'bold', size: 10 },
                             color: '#171717'
                         },

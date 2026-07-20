@@ -84,6 +84,54 @@
                 <i data-lucide="arrow-right" class="w-3 h-3"></i>
             </div>
         </a>
+
+        <!-- Early Warning -->
+        <a href="{{ route('analisis.early-warning') }}" 
+           class="group block bg-white border-2 border-[#171717] p-6 shadow-[4px_4px_0px_0px_#171717] hover:shadow-[6px_6px_0px_0px_#171717] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all text-center">
+            <div class="w-16 h-16 mx-auto bg-red-100 border-2 border-[#171717] shadow-[2px_2px_0px_0px_#171717] flex items-center justify-center mb-5 group-hover:rotate-3 transition-transform">
+                <i data-lucide="siren" class="w-8 h-8 text-red-700"></i>
+            </div>
+            <h3 class="text-lg font-serif font-black uppercase text-[#171717] mb-2 group-hover:underline">Peringatan Dini</h3>
+            <p class="text-xs font-mono font-bold text-neutral-500 leading-relaxed">
+                Deteksi lonjakan (outbreak) penyakit menular per kecamatan dengan membandingkan kasus terkini terhadap baseline tahun-tahun sebelumnya.
+            </p>
+            <div class="mt-4 inline-flex items-center gap-1 text-[10px] font-mono font-bold uppercase text-red-700 group-hover:underline">
+                <span>Buka Peringatan</span>
+                <i data-lucide="arrow-right" class="w-3 h-3"></i>
+            </div>
+        </a>
+
+        <!-- Rasio Nakes -->
+        <a href="{{ route('analisis.rasio-nakes') }}" 
+           class="group block bg-white border-2 border-[#171717] p-6 shadow-[4px_4px_0px_0px_#171717] hover:shadow-[6px_6px_0px_0px_#171717] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all text-center">
+            <div class="w-16 h-16 mx-auto bg-blue-100 border-2 border-[#171717] shadow-[2px_2px_0px_0px_#171717] flex items-center justify-center mb-5 group-hover:-rotate-3 transition-transform">
+                <i data-lucide="stethoscope" class="w-8 h-8 text-blue-700"></i>
+            </div>
+            <h3 class="text-lg font-serif font-black uppercase text-[#171717] mb-2 group-hover:underline">Rasio Nakes</h3>
+            <p class="text-xs font-mono font-bold text-neutral-500 leading-relaxed">
+                Perbandingan beban penyakit menular terhadap jumlah tenaga kesehatan tiap kecamatan untuk mengidentifikasi wilayah kekurangan SDM.
+            </p>
+            <div class="mt-4 inline-flex items-center gap-1 text-[10px] font-mono font-bold uppercase text-blue-700 group-hover:underline">
+                <span>Buka Rasio</span>
+                <i data-lucide="arrow-right" class="w-3 h-3"></i>
+            </div>
+        </a>
+
+        <!-- Indeks Kerawanan -->
+        <a href="{{ route('analisis.indeks-kerawanan') }}" 
+           class="group block bg-white border-2 border-[#171717] p-6 shadow-[4px_4px_0px_0px_#171717] hover:shadow-[6px_6px_0px_0px_#171717] hover:-translate-x-0.5 hover:-translate-y-0.5 transition-all text-center">
+            <div class="w-16 h-16 mx-auto bg-orange-100 border-2 border-[#171717] shadow-[2px_2px_0px_0px_#171717] flex items-center justify-center mb-5 group-hover:rotate-6 transition-transform">
+                <i data-lucide="shield-alert" class="w-8 h-8 text-orange-700"></i>
+            </div>
+            <h3 class="text-lg font-serif font-black uppercase text-[#171717] mb-2 group-hover:underline">Indeks Kerawanan</h3>
+            <p class="text-xs font-mono font-bold text-neutral-500 leading-relaxed">
+                Skor gabungan (stunting, beban penyakit per nakes, kelangkaan faskes) untuk menentukan prioritas intervensi tiap kecamatan.
+            </p>
+            <div class="mt-4 inline-flex items-center gap-1 text-[10px] font-mono font-bold uppercase text-orange-700 group-hover:underline">
+                <span>Buka Indeks</span>
+                <i data-lucide="arrow-right" class="w-3 h-3"></i>
+            </div>
+        </a>
     </div>
 </div>
 @endsection

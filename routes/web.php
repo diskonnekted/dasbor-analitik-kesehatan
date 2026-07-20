@@ -36,6 +36,9 @@ Route::prefix('analisis')->name('analisis.')->group(function () {
     Route::get('/klaster', [AnalisisController::class, 'klaster'])->name('klaster');
     Route::get('/prediksi', [AnalisisController::class, 'prediksi'])->name('prediksi');
     Route::get('/spasial', [AnalisisController::class, 'spasial'])->name('spasial');
+    Route::get('/early-warning', [AnalisisController::class, 'earlyWarning'])->name('early-warning');
+    Route::get('/rasio-nakes', [AnalisisController::class, 'rasioNakes'])->name('rasio-nakes');
+    Route::get('/indeks-kerawanan', [AnalisisController::class, 'indeksKerawanan'])->name('indeks-kerawanan');
 });
 
 // Laporan Routes

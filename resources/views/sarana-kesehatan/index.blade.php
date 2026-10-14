@@ -53,7 +53,7 @@
             </h3>
             <span class="md-badge"><i data-lucide="chart-column" class="h-3 w-3" aria-hidden="true"></i> Tahun Terkini</span>
         </div>
-        <div class="h-[380px]">
+        <div class="h-[480px]">
             <canvas id="saranaChart" role="img" aria-label="Grafik batang jumlah sarana kesehatan per kecamatan"></canvas>
         </div>
     </div>

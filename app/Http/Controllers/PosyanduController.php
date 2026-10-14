@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use App\Models\Posyandu;
 use App\Models\Kecamatan;
 
@@ -27,6 +28,11 @@ class PosyanduController extends Controller
             ];
         });
         
-        return view('posyandu.index', compact('data', 'mapData'));
+        // Trend Data (Sum by Year)
+        $yearly = DB::table('posyandus')
+            ->selectRaw('tahun, SUM(jumlah_posyandu) as posyandu, SUM(jumlah_kader) as kader')
+            ->groupBy('tahun')->orderBy('tahun')->get();
+
+        return view('posyandu.index', compact('data', 'mapData', 'yearly'));
     }
 }

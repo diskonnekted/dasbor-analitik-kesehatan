@@ -4,43 +4,46 @@
 @section('page-title', $title)
 
 @section('content')
-<div class="bg-white rounded-lg shadow-md overflow-hidden border border-gray-200">
-    <div class="px-6 py-5 border-b border-gray-200 bg-gray-50 flex justify-between items-center">
-        <h3 class="text-lg font-bold text-gray-900">{{ $title }}</h3>
-        <div class="flex gap-2">
-            <a href="{{ route('laporan.export.excel', ['type' => request()->query('type')]) }}" class="bg-green-600 hover:bg-green-700 text-white px-3 py-2 rounded text-sm font-medium">
-                <i class="fas fa-file-excel mr-1"></i> Export Excel
+<div class="md-card overflow-hidden">
+    <div class="flex flex-wrap items-center justify-between gap-3 border-b border-md-outline/10 px-6 py-5">
+        <h3 class="text-lg font-medium text-md-on-surface">{{ $title }}</h3>
+        <div class="flex flex-wrap gap-2">
+            <a href="{{ route('laporan.export.excel', ['type' => request()->query('type')]) }}"
+               class="inline-flex h-10 items-center gap-2 rounded-full bg-md-secondary-container px-5 text-sm font-medium text-md-on-secondary-container transition-all duration-300 ease-md hover:bg-md-secondary-container/70 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-md-primary focus-visible:ring-offset-2">
+                <i class="fas fa-file-excel" aria-hidden="true"></i> Export Excel
             </a>
-            <a href="{{ route('laporan.export.pdf', ['type' => request()->query('type')]) }}" target="_blank" class="bg-red-600 hover:bg-red-700 text-white px-3 py-2 rounded text-sm font-medium">
-                <i class="fas fa-print mr-1"></i> Cetak / PDF
+            <a href="{{ route('laporan.export.pdf', ['type' => request()->query('type')]) }}" target="_blank"
+               class="inline-flex h-10 items-center gap-2 rounded-full bg-md-primary px-5 text-sm font-medium text-md-on-primary transition-all duration-300 ease-md hover:bg-md-primary/90 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-md-primary focus-visible:ring-offset-2">
+                <i class="fas fa-print" aria-hidden="true"></i> Cetak / PDF
             </a>
-            <a href="{{ route('laporan.index') }}" class="bg-gray-500 hover:bg-gray-600 text-white px-3 py-2 rounded text-sm font-medium">
+            <a href="{{ route('laporan.index') }}"
+               class="inline-flex h-10 items-center rounded-full px-5 text-sm font-medium text-md-primary transition-colors duration-200 ease-md hover:bg-md-primary/10 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-md-primary focus-visible:ring-offset-2">
                 Kembali
             </a>
         </div>
     </div>
 
-    <div class="p-6 overflow-x-auto">
-        <table class="min-w-full divide-y divide-gray-200 border">
-            <thead class="bg-gray-100">
-                <tr>
-                    <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider w-16">No</th>
+    <div class="overflow-x-auto">
+        <table class="md-table">
+            <thead>
+                <tr class="border-b border-md-outline/20">
+                    <th scope="col" class="w-16">No</th>
                     @foreach($headers as $header)
-                        <th scope="col" class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">{{ $header }}</th>
+                        <th scope="col">{{ $header }}</th>
                     @endforeach
                 </tr>
             </thead>
-            <tbody class="bg-white divide-y divide-gray-200">
+            <tbody>
                 @forelse($data as $index => $row)
-                    <tr class="{{ $index % 2 == 0 ? 'bg-white' : 'bg-gray-50' }} hover:bg-blue-50">
-                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">{{ $index + 1 }}</td>
+                    <tr class="border-b border-md-outline/10 transition-colors duration-200 hover:bg-md-primary/5">
+                        <td class="whitespace-nowrap">{{ $index + 1 }}</td>
                         @foreach($row as $cell)
-                            <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700">{{ is_numeric($cell) && strpos($cell, '.') !== false ? number_format((float)$cell, 2, ',', '.') : $cell }}</td>
+                            <td class="whitespace-nowrap text-md-on-surface-variant">{{ is_numeric($cell) && strpos($cell, '.') !== false ? number_format((float)$cell, 2, ',', '.') : $cell }}</td>
                         @endforeach
                     </tr>
                 @empty
                     <tr>
-                        <td colspan="{{ count($headers) + 1 }}" class="px-6 py-4 whitespace-nowrap text-sm text-center text-gray-500">
+                        <td colspan="{{ count($headers) + 1 }}" class="px-6 py-12 text-center text-md-on-surface-variant">
                             Tidak ada data tersedia.
                         </td>
                     </tr>

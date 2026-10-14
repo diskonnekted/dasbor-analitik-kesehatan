@@ -5,36 +5,25 @@
 @section('page-title', 'Sync Data dari OpenData Banjarnegara')
 
 @section('content')
-<div class="max-w-4xl mx-auto">
-    <div class="bg-white rounded-lg shadow-md p-6">
+<div class="mx-auto max-w-4xl">
+    <div class="md-card p-6 md:p-8">
         <div class="mb-6">
-            <h3 class="text-lg font-bold text-gray-900 mb-2">Sync Data Otomatis</h3>
-            <p class="text-sm text-gray-600">
+            <h3 class="text-lg font-medium text-md-on-surface">Sync Data Otomatis</h3>
+            <p class="mt-2 text-sm leading-relaxed text-md-on-surface-variant">
                 Ambil data terbaru dari OpenData Banjarnegara dan import ke database aplikasi.
                 Data akan di-sync otomatis setiap hari jam 02:00 WIB.
             </p>
         </div>
-        
-        @if(session('success'))
-            <div class="mb-4 bg-green-100 border-l-4 border-green-500 text-green-700 p-4 rounded">
-                <p>{{ session('success') }}</p>
-            </div>
-        @endif
-        
-        @if(session('error'))
-            <div class="mb-4 bg-red-100 border-l-4 border-red-500 text-red-700 p-4 rounded">
-                <p>{{ session('error') }}</p>
-            </div>
-        @endif
-        
+
         <form action="{{ route('admin.opendata.sync') }}" method="POST">
             @csrf
-            
-            <div class="mb-4">
-                <label class="block text-sm font-semibold text-gray-700 mb-2">
+
+            <div class="mb-6">
+                <label for="dataset" class="mb-2 block text-sm font-medium text-md-on-surface">
                     Pilih Dataset (Opsional)
                 </label>
-                <select name="dataset" class="w-full border-gray-300 rounded-md shadow-sm focus:border-red-500 focus:ring-red-500">
+                <select name="dataset" id="dataset"
+                        class="h-14 w-full rounded-t-xl border-b-2 border-md-outline bg-md-surface-container-low px-4 text-sm text-md-on-surface transition-colors duration-200 focus:border-md-primary focus:outline-none focus:ring-2 focus:ring-md-primary/30 focus:ring-offset-0">
                     <option value="">-- Sync Semua Dataset --</option>
                     <option value="tenaga_kesehatan">Jumlah Tenaga Kesehatan</option>
                     <option value="faskes">Jumlah Faskes (RS, Puskesmas, dll)</option>
@@ -44,31 +33,44 @@
                     <option value="pasien_rawat">Pasien Rawat Jalan/Inap</option>
                 </select>
             </div>
-            
-            <div class="flex items-center space-x-4">
-                <button type="submit" class="bg-red-600 hover:bg-red-700 text-white font-semibold py-2 px-6 rounded-md transition">
-                    <svg class="w-5 h-5 inline-block mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+
+            <div class="flex flex-wrap items-center gap-3">
+                <button type="submit"
+                        class="inline-flex h-11 items-center gap-2 rounded-full bg-md-primary px-7 text-sm font-medium text-md-on-primary transition-all duration-300 ease-md hover:bg-md-primary/90 hover:shadow-md active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-md-primary focus-visible:ring-offset-2">
+                    <svg class="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"></path>
                     </svg>
                     Sync Sekarang
                 </button>
-                
-                <a href="{{ route('dashboard') }}" class="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-6 rounded-md transition">
+
+                <a href="{{ route('dashboard') }}"
+                   class="inline-flex h-11 items-center rounded-full bg-md-secondary-container px-7 text-sm font-medium text-md-on-secondary-container transition-all duration-300 ease-md hover:bg-md-secondary-container/70 active:scale-95 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-md-primary focus-visible:ring-offset-2">
                     Batal
                 </a>
             </div>
         </form>
-        
-        <div class="mt-8 pt-6 border-t">
-            <h4 class="text-md font-bold text-gray-900 mb-3">Informasi Dataset</h4>
-            <div class="space-y-2 text-sm text-gray-600">
-                <p><strong>Sumber:</strong> OpenData Banjarnegara (Dinas Kesehatan)</p>
-                <p><strong>Update Terakhir:</strong> {{ now()->format('d F Y H:i') }} WIB</p>
-                <p><strong>Frekuensi Sync:</strong> Harian (02:00 WIB) dan Mingguan (Senin, 03:00 WIB)</p>
-                <p><strong>Total Dataset:</strong> 8 dataset kesehatan</p>
-            </div>
+
+        <div class="mt-8 border-t border-md-outline/15 pt-6">
+            <h4 class="mb-3 text-base font-medium text-md-on-surface">Informasi Dataset</h4>
+            <dl class="grid grid-cols-1 gap-3 text-sm sm:grid-cols-2">
+                <div class="rounded-2xl bg-md-surface-container-low px-4 py-3">
+                    <dt class="text-xs text-md-on-surface-variant">Sumber</dt>
+                    <dd class="mt-0.5 font-medium text-md-on-surface">OpenData Banjarnegara (Dinas Kesehatan)</dd>
+                </div>
+                <div class="rounded-2xl bg-md-surface-container-low px-4 py-3">
+                    <dt class="text-xs text-md-on-surface-variant">Update Terakhir</dt>
+                    <dd class="mt-0.5 font-medium text-md-on-surface">{{ now()->format('d F Y H:i') }} WIB</dd>
+                </div>
+                <div class="rounded-2xl bg-md-surface-container-low px-4 py-3">
+                    <dt class="text-xs text-md-on-surface-variant">Frekuensi Sync</dt>
+                    <dd class="mt-0.5 font-medium text-md-on-surface">Harian (02:00 WIB) &amp; Mingguan (Senin, 03:00 WIB)</dd>
+                </div>
+                <div class="rounded-2xl bg-md-surface-container-low px-4 py-3">
+                    <dt class="text-xs text-md-on-surface-variant">Total Dataset</dt>
+                    <dd class="mt-0.5 font-medium text-md-on-surface">8 dataset kesehatan</dd>
+                </div>
+            </dl>
         </div>
     </div>
 </div>
 @endsection
-```

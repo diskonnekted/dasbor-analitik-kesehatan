@@ -22,6 +22,47 @@
         </div>
     </div>
 
+    @if (!empty($insights))
+    <!-- Temuan Kunci & Rekomendasi -->
+    <section class="space-y-4">
+        <div class="flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-md-primary/10 text-md-primary">
+                <i data-lucide="lightbulb" class="h-5 w-5"></i>
+            </div>
+            <div>
+                <h2 class="text-xl font-medium tracking-tight text-md-on-surface">Temuan Kunci &amp; Rekomendasi</h2>
+                <p class="text-xs text-md-on-surface-variant">Sintesis otomatis dari data terbaru yang tersedia di basis data.</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            @foreach ($insights as $i => $ins)
+                @php $ikonTone = $i % 2 === 0 ? 'bg-md-primary/10 text-md-primary' : 'bg-md-tertiary/10 text-md-tertiary'; @endphp
+                <article class="md-card flex flex-col gap-3 p-5">
+                    <div class="flex items-start gap-3">
+                        <div class="flex h-11 w-11 shrink-0 items-center justify-center rounded-full {{ $ikonTone }}">
+                            <i data-lucide="{{ $ins['ikon'] }}" class="h-5 w-5"></i>
+                        </div>
+                        <div class="min-w-0">
+                            <p class="text-[11px] font-medium uppercase tracking-wide text-md-on-surface-variant">{{ $ins['label'] }}</p>
+                            <p class="mt-0.5 text-xl font-medium leading-snug text-md-on-surface">{{ $ins['nilai'] }}</p>
+                        </div>
+                    </div>
+                    <p class="text-xs leading-relaxed text-md-on-surface-variant">{{ $ins['temuan'] }}</p>
+                    <div class="rounded-2xl bg-md-secondary-container/50 p-3">
+                        <p class="mb-1 text-[10px] font-semibold uppercase tracking-wider text-md-on-secondary-container/70">Rekomendasi</p>
+                        <p class="text-xs leading-relaxed text-md-on-secondary-container">{{ $ins['rekomendasi'] }}</p>
+                    </div>
+                    <a href="{{ $ins['url'] }}" class="group/link mt-auto inline-flex items-center gap-1.5 self-start text-xs font-medium text-md-primary transition-colors hover:text-md-primary/80">
+                        {{ $ins['link'] }}
+                        <i data-lucide="arrow-right" class="h-3 w-3 transition-transform duration-300 ease-md group-hover/link:translate-x-1"></i>
+                    </a>
+                </article>
+            @endforeach
+        </div>
+    </section>
+    @endif
+
     <!-- Cards Grid -->
     <div class="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
         @foreach ([

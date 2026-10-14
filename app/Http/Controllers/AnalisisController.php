@@ -22,7 +22,132 @@ class AnalisisController extends Controller
 
     public function index()
     {
-        return view('analisis.index');
+        $kecIds = $this->canonicalKecamatanIds();
+        $data = $this->getKecamatanDataForAnalysis();
+        $insights = [];
+
+        $fmt = fn($v) => number_format((float) $v, 2, ',', '.');
+
+        // 1. Tren stunting kabupaten (tahun terakhir vs sebelumnya)
+        $tahunan = Stunting::whereIn('kecamatan_id', $kecIds)
+            ->selectRaw('tahun, SUM(jumlah_stunting)*100.0/NULLIF(SUM(jumlah_balita_diukur),0) AS prev')
+            ->groupBy('tahun')->orderBy('tahun')->get();
+        if ($tahunan->count() >= 1) {
+            $last = $tahunan->last();
+            $prev = $tahunan->count() >= 2 ? $tahunan[$tahunan->count() - 2] : null;
+            $delta = $prev ? round($last->prev - $prev->prev, 2) : null;
+            $arah = $delta === null ? '' : ($delta <= 0 ? 'turun ' : 'naik ');
+            $tertinggi = collect($data)->sortByDesc('stunting')->first();
+            $insights[] = [
+                'ikon' => 'activity',
+                'label' => 'Prevalensi Stunting',
+                'nilai' => $fmt($last->prev) . '% (' . $last->tahun . ')',
+                'temuan' => 'Prevalensi kabupaten ' . ($delta !== null ? $arah . abs($delta) . ' poin dibanding ' . $prev->tahun : 'pada tahun terbaru') . '.'
+                    . ($tertinggi ? ' Wilayah tertinggi: Kec. ' . $tertinggi['nama'] . ' (' . $fmt($tertinggi['stunting']) . '%).' : ''),
+                'rekomendasi' => $tertinggi ? 'Prioritaskan intervensi 1.000 HPK, pemantauan gizi balita, dan akses air bersih/sanitasi di Kec. ' . $tertinggi['nama'] . '.' : 'Lengkapi data pengukuran balita.',
+                'link' => 'Lihat Klaster Wilayah',
+                'url' => url('analisis/klaster'),
+            ];
+        }
+
+        // 2. Faskes per 100 ribu penduduk terendah
+        $faskesMin = collect($data)->sortBy('faskes')->first();
+        $rataFaskes = count($data) ? collect($data)->avg('faskes') : 0;
+        if ($faskesMin) {
+            $insights[] = [
+                'ikon' => 'hospital',
+                'label' => 'Akses Fasilitas Kesehatan',
+                'nilai' => $fmt($faskesMin['faskes']) . ' / 100rb',
+                'temuan' => 'Kec. ' . $faskesMin['nama'] . ' paling tipis fasilitasnya (kabupaten rata-rata ' . $fmt($rataFaskes) . ' faskes per 100 ribu penduduk).',
+                'rekomendasi' => 'Dorongan pemenuhan faskes (penguatan Puskesmas/Pustu) sebagai prioritas pembangunan daerah di Kec. ' . $faskesMin['nama'] . '.',
+                'link' => 'Lihat Peta Spasial',
+                'url' => url('analisis/spasial'),
+            ];
+        }
+
+        // 3. Nakes per 1.000 penduduk terendah
+        $nakesMin = collect($data)->sortBy('nakes')->first();
+        $rataNakes = count($data) ? collect($data)->avg('nakes') : 0;
+        if ($nakesMin) {
+            $insights[] = [
+                'ikon' => 'stethoscope',
+                'label' => 'Ketersediaan SDM Kesehatan',
+                'nilai' => $fmt($nakesMin['nakes']) . ' / 1.000 jiwa',
+                'temuan' => 'Kec. ' . $nakesMin['nama'] . ' paling kekurangan nakes; rata-rata kabupaten ' . $fmt($rataNakes) . ' per 1.000 penduduk.',
+                'rekomendasi' => 'Redistribusi/penempatan nakes (NRO) dan insentif daerah prioritas untuk Kec. ' . $nakesMin['nama'] . '.',
+                'link' => 'Lihat Rasio Nakes',
+                'url' => url('analisis/rasio-nakes'),
+            ];
+        }
+
+        // 4. Penyakit dengan kenaikan tahunan (YoY) terbesar
+        $penyakitKolom = ['dbd' => 'DBD', 'diare' => 'Diare', 'pneumonia' => 'Pneumonia', 'tb_paru' => 'TB Paru', 'malaria' => 'Malaria'];
+        $penTahunan = KasusPenyakit::whereIn('kecamatan_id', $kecIds)
+            ->selectRaw('tahun, SUM(dbd) dbd, SUM(diare) diare, SUM(pneumonia) pneumonia, SUM(tb_paru) tb_paru, SUM(malaria) malaria')
+            ->groupBy('tahun')->orderBy('tahun')->get();
+        if ($penTahunan->count() >= 2) {
+            $pl = $penTahunan->last();
+            $pp = $penTahunan[$penTahunan->count() - 2];
+            $riser = null;
+            foreach ($penyakitKolom as $k => $label) {
+                if ($pp->$k <= 0) continue;
+                $pct = ($pl->$k - $pp->$k) / $pp->$k * 100;
+                if ($riser === null || $pct > $riser['pct']) {
+                    $riser = ['label' => $label, 'pct' => $pct, 'sekarang' => $pl->$k, 'dulu' => $pp->$k];
+                }
+            }
+            if ($riser && $riser['pct'] > 0) {
+                $insights[] = [
+                    'ikon' => 'siren',
+                    'label' => 'Lonjakan Penyakit Menular',
+                    'nilai' => $riser['label'] . ' +' . number_format($riser['pct'], 1, ',', '.'),
+                    'temuan' => 'Kenaikan YoY terbesar kabupaten (' . $riser['dulu'] . ' → ' . $riser['sekarang'] . ' kasus, ' . $pp->tahun . ' → ' . $pl->tahun . ').',
+                    'rekomendasi' => 'Perkuat surveilans, 3M Plus, dan kesiapsiagaan layanan di wilayah sumber kasus sebelum musim transisi.',
+                    'link' => 'Lihat Peringatan Dini',
+                    'url' => url('analisis/early-warning'),
+                ];
+            }
+        }
+
+        // 5. Kematian ibu & bayi (tabel akis + akbs, tahun terakhir)
+        $akiTahunan = DB::table('akis')->whereIn('kecamatan_id', $kecIds)
+            ->selectRaw('tahun, SUM(jumlah_kematian_ibu) ibu')->groupBy('tahun')->orderBy('tahun')->get();
+        if ($akiTahunan->count() >= 1) {
+            $akiLast = $akiTahunan->last();
+            $akiPrev = $akiTahunan->count() >= 2 ? $akiTahunan[$akiTahunan->count() - 2] : null;
+            $akbLast = (int) (DB::table('akbs')->whereIn('kecamatan_id', $kecIds)->where('tahun', $akiLast->tahun)->sum('jumlah_kematian_bayi'));
+            $deltaIbu = $akiPrev ? $akiLast->ibu - $akiPrev->ibu : null;
+            $insights[] = [
+                'ikon' => 'heart-crack',
+                'label' => 'Kematian Ibu & Bayi',
+                'nilai' => ($akiLast->ibu + 0) . ' ibu / ' . $akbLast . ' bayi (' . $akiLast->tahun . ')',
+                'temuan' => 'Kematian ibu ' . ($deltaIbu !== null ? ($deltaIbu > 0 ? 'naik +' : ($deltaIbu < 0 ? 'turun ' : 'tetap ')) . abs($deltaIbu) . ' kasus dibanding ' . $akiPrev->tahun : 'tahun terbaru yang tersedia') . '.',
+                'rekomendasi' => 'Perkuat ANC komprehensif, deteksi risiko kehamilan (preeklampsia/perdarahan), dan rujukan neonatal emas.',
+                'link' => 'Lihat Data Aki & Akb',
+                'url' => url('aki-akb'),
+            ];
+        }
+
+        // 6. Kebaruan data (data governance)
+        $sumber = [
+            'Imunisasi' => DB::table('imunisasis')->max('tahun'),
+            'Posyandu' => DB::table('posyandus')->max('tahun'),
+            'Stunting'   => Stunting::max('tahun'),
+        ];
+        $terlambat = collect($sumber)->filter(fn($t) => (int) $t < 2024);
+        if ($terlambat->isNotEmpty()) {
+            $insights[] = [
+                'ikon' => 'database-alert',
+                'label' => 'Kebaruan Data',
+                'nilai' => $terlambat->count() . ' sumber tertinggal',
+                'temuan' => $terlambat->map(fn($t, $k) => $k . ' (' . $t . ')')->implode(', ') . ' belum diperbarui ke tahun terbaru.',
+                'rekomendasi' => 'Sinkronkan ulang Open Data tanggal terbaru melalui menu Admin > Sinkronisasi agar analisis tidak bias ke data lama.',
+                'link' => 'Lihat Indeks Kerawanan',
+                'url' => url('analisis/indeks-kerawanan'),
+            ];
+        }
+
+        return view('analisis.index', compact('insights'));
     }
 
     public function korelasi()

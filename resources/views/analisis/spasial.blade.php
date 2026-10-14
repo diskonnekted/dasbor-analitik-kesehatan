@@ -78,9 +78,9 @@
     document.addEventListener("DOMContentLoaded", function() {
         var map = L.map('map').setView([-7.3888, 109.6960], 11);
 
-        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
             maxZoom: 19,
-            attribution: '© OpenStreetMap contributors'
+            attribution: 'Tiles &copy; Esri'
         }).addTo(map);
 
         function normalizeName(name) {

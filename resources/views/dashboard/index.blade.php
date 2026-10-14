@@ -259,8 +259,8 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 
     const map = L.map('map').setView([-7.38, 109.65], 11);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
+    L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
+        attribution: 'Tiles &copy; Esri'
     }).addTo(map);
 
     fetch('{{ asset("assets/peta_kecamatan.geojson") }}')

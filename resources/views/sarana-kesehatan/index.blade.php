@@ -98,7 +98,7 @@
     document.addEventListener('DOMContentLoaded', function() {
         const mapData = @json($mapData);
 
-        const map = L.map('map').setView([-7.38, 109.65], 11);
+        const map = L.map('map', { zoomSnap: 0.1 }).setView([-7.38, 109.65], 11);
 
         L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Street_Map/MapServer/tile/{z}/{y}/{x}', {
             attribution: 'Tiles &copy; Esri'
@@ -191,6 +191,9 @@
                         layer.bindPopup(popupContent);
                     }
                 }).addTo(map);
+
+                // Isi frame penuh sesuai batas polygon
+                map.fitBounds(geojson.getBounds());
             });
     });
 </script>

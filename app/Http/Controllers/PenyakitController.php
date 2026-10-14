@@ -19,6 +19,11 @@ class PenyakitController extends Controller
             ->selectRaw('SUM(malaria) as malaria, SUM(tb_paru) as tb_paru, SUM(pneumonia) as pneumonia, SUM(diare) as diare, SUM(dbd) as dbd')
             ->first();
             
+        // Trend Data (Sum by Year)
+        $yearly = DB::table('kasus_penyakits')
+            ->selectRaw('tahun, SUM(malaria + tb_paru + pneumonia + diare + dbd) as total')
+            ->groupBy('tahun')->orderBy('tahun')->get();
+
         $labels = ['Malaria', 'TB Paru', 'Pneumonia', 'Diare', 'DBD'];
         $dataset = [
             $chartData->malaria ?? 0,
@@ -48,6 +53,6 @@ class PenyakitController extends Controller
         }
         $analysis .= "Grafik di bawah ini mengilustrasikan perbandingan frekuensi kejadian antar penyakit.";
 
-        return view('penyakit.index', compact('data', 'labels', 'dataset', 'analysis'));
+        return view('penyakit.index', compact('data', 'labels', 'dataset', 'yearly', 'analysis'));
     }
 }

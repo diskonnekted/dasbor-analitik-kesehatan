@@ -29,6 +29,18 @@ class AKIAKBController extends Controller
             ->orderByDesc('total')
             ->get();
             
+        // Trend Data (Sum by Year)
+        $akiYearly = DB::table('akis')
+            ->selectRaw('tahun, SUM(jumlah_kematian_ibu) as ibu')
+            ->groupBy('tahun')->orderBy('tahun')->get();
+        $akbYearly = DB::table('akbs')
+            ->selectRaw('tahun, SUM(jumlah_kematian_bayi) as bayi')
+            ->groupBy('tahun')->orderBy('tahun')->get();
+        $yearly = $akiYearly->map(function ($r) use ($akbYearly) {
+            $r->bayi = $akbYearly->firstWhere('tahun', $r->tahun)->bayi ?? 0;
+            return $r;
+        });
+
         $labels = $chartData->pluck('puskesmas');
         $akiData = $chartData->pluck('kematian_ibu');
         $akbData = $chartData->pluck('kematian_bayi');
@@ -46,6 +58,6 @@ class AKIAKBController extends Controller
         }
         $analysis .= "Grafik di bawah ini merinci perbandingan AKI dan AKB pada tingkat Puskesmas.";
 
-        return view('aki-akb.index', compact('data', 'labels', 'akiData', 'akbData', 'analysis'));
+        return view('aki-akb.index', compact('data', 'labels', 'akiData', 'akbData', 'yearly', 'analysis'));
     }
 }

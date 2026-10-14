@@ -27,6 +27,17 @@
         </div>
     </div>
 
+    <!-- Tren Tahunan -->
+    <div class="md-card p-6 md:p-8">
+        <h2 class="md-card-title mb-6">
+            <i data-lucide="line-chart" class="w-4 h-4 text-md-primary"></i>
+            Tren Kasus Stunting & Gizi Buruk Per Tahun
+        </h2>
+        <div class="h-[300px]">
+            <canvas id="trendChart" role="img" aria-label="Grafik tren kasus stunting dan gizi buruk per tahun"></canvas>
+        </div>
+    </div>
+
     <!-- Tabel -->
     <div class="md-card overflow-hidden">
         <div class="flex items-center justify-between gap-3 border-b border-md-outline/10 px-6 py-5">
@@ -103,4 +114,24 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            new Chart(document.getElementById('trendChart'), {
+                type: 'line',
+                data: {
+                    labels: @json($yearly->pluck('tahun')),
+                    datasets: [
+                        { label: 'Stunting', data: @json($yearly->pluck('stunting')), borderColor: '#6750A4', tension: 0.3, borderWidth: 2, pointRadius: 4, pointBackgroundColor: '#6750A4' },
+                        { label: 'Gizi Buruk', data: @json($yearly->pluck('gizi_buruk')), borderColor: '#7D5260', tension: 0.3, borderWidth: 2, pointRadius: 4, pointBackgroundColor: '#7D5260' }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 10 } } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        });
+    </script>
 @endpush

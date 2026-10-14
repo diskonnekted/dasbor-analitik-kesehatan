@@ -22,6 +22,11 @@ class FaskesController extends Controller
             ->orderByDesc('total')
             ->get();
             
+        // Trend Data (Sum by Year)
+        $yearly = DB::table('faskes')
+            ->selectRaw('tahun, SUM(rs_umum + puskesmas + klinik + poskesdes) as total')
+            ->groupBy('tahun')->orderBy('tahun')->get();
+
         $labels = $chartData->pluck('kecamatan_nama');
         $rsData = $chartData->pluck('rs');
         $puskesmasData = $chartData->pluck('puskesmas');
@@ -37,6 +42,6 @@ class FaskesController extends Controller
         }
         $analysis .= "Grafik di bawah ini merinci komposisi jenis fasilitas kesehatan di setiap kecamatan.";
 
-        return view('faskes.index', compact('data', 'labels', 'rsData', 'puskesmasData', 'klinikData', 'analysis'));
+        return view('faskes.index', compact('data', 'labels', 'rsData', 'puskesmasData', 'klinikData', 'yearly', 'analysis'));
     }
 }

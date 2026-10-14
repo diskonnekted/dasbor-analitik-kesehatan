@@ -27,6 +27,17 @@
         </div>
     </div>
 
+    <!-- Tren Tahunan -->
+    <div class="md-card p-6 md:p-8">
+        <h2 class="md-card-title mb-6">
+            <i data-lucide="line-chart" class="w-4 h-4 text-md-primary"></i>
+            Tren Jumlah Fasilitas Kesehatan Per Tahun
+        </h2>
+        <div class="h-[300px]">
+            <canvas id="trendChart" role="img" aria-label="Grafik tren jumlah fasilitas kesehatan per tahun"></canvas>
+        </div>
+    </div>
+
     <!-- Tabel -->
     <div class="md-card overflow-hidden">
         <div class="flex items-center justify-between gap-3 border-b border-md-outline/10 px-6 py-5">
@@ -106,4 +117,31 @@ document.addEventListener('DOMContentLoaded', function() {
     });
 });
 </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            new Chart(document.getElementById('trendChart'), {
+                type: 'line',
+                data: {
+                    labels: @json($yearly->pluck('tahun')),
+                    datasets: [{
+                        label: 'Total Fasilitas',
+                        data: @json($yearly->pluck('total')),
+                        borderColor: '#6750A4',
+                        backgroundColor: 'rgba(103, 80, 164, 0.12)',
+                        fill: true,
+                        tension: 0.3,
+                        borderWidth: 2,
+                        pointRadius: 4,
+                        pointBackgroundColor: '#6750A4'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true } }
+                }
+            });
+        });
+    </script>
 @endpush

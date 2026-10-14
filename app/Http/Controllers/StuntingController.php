@@ -22,6 +22,11 @@ class StuntingController extends Controller
             ->orderByDesc('total')
             ->get();
             
+        // Trend Data (Sum by Year)
+        $yearly = DB::table('stuntings')
+            ->selectRaw('tahun, SUM(jumlah_stunting) as stunting, SUM(jumlah_gizi_buruk) as gizi_buruk')
+            ->groupBy('tahun')->orderBy('tahun')->get();
+
         $labels = $chartData->pluck('kecamatan_nama');
         $stuntingData = $chartData->pluck('stunting');
         $giziBurukData = $chartData->pluck('gizi_buruk');
@@ -38,6 +43,6 @@ class StuntingController extends Controller
         }
         $analysis .= "Grafik di bawah ini memetakan sebaran Stunting dan Gizi Buruk di setiap kecamatan untuk prioritas intervensi.";
 
-        return view('stunting.index', compact('data', 'labels', 'stuntingData', 'giziBurukData', 'analysis'));
+        return view('stunting.index', compact('data', 'labels', 'stuntingData', 'giziBurukData', 'yearly', 'analysis'));
     }
 }

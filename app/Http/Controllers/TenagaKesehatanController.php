@@ -22,6 +22,11 @@ class TenagaKesehatanController extends Controller
             ->orderByDesc('total')
             ->get();
             
+        // Trend Data (Sum by Year)
+        $yearly = DB::table('tenaga_kesehatans')
+            ->selectRaw('tahun, SUM(dokter_umum) as dokter, SUM(perawat) as perawat, SUM(bidan) as bidan, SUM(farmasi) as farmasi')
+            ->groupBy('tahun')->orderBy('tahun')->get();
+
         $labels = $chartData->pluck('kecamatan_nama');
         $dokterData = $chartData->pluck('dokter_umum');
         $perawatData = $chartData->pluck('perawat');
@@ -41,6 +46,6 @@ class TenagaKesehatanController extends Controller
         }
         $analysis .= "Mayoritas tenaga kesehatan didominasi oleh perawat sebanyak " . number_format($totalPerawat, 0, ',', '.') . " personel.";
 
-        return view('tenaga-kesehatan.index', compact('data', 'labels', 'dokterData', 'perawatData', 'bidanData', 'analysis'));
+        return view('tenaga-kesehatan.index', compact('data', 'labels', 'dokterData', 'perawatData', 'bidanData', 'yearly', 'analysis'));
     }
 }

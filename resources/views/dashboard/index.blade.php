@@ -112,7 +112,7 @@
     <!-- Map & side widgets -->
     <div class="grid grid-cols-1 gap-6 lg:grid-cols-3">
         <!-- Peta Stunting -->
-        <div class="overflow-hidden rounded-[28px] bg-md-surface-container shadow-sm transition-shadow duration-300 ease-md hover:shadow-md lg:col-span-2">
+        <div class="flex flex-col overflow-hidden rounded-[28px] bg-md-surface-container shadow-sm transition-shadow duration-300 ease-md hover:shadow-md lg:col-span-2">
             <div class="flex items-center justify-between gap-3 p-6">
                 <h3 class="flex items-center gap-2 text-base font-medium text-md-on-surface">
                     <i data-lucide="map" class="h-4.5 w-4.5 text-md-primary" aria-hidden="true"></i>
@@ -123,16 +123,8 @@
                     Live WebGIS
                 </span>
             </div>
-            <div class="relative">
-                <div id="map" class="h-[340px] w-full" style="z-index: 1;"></div>
-                <!-- Legenda -->
-                <div class="pointer-events-none absolute right-4 top-4 z-[500] flex flex-col gap-1.5 rounded-2xl bg-md-surface/90 p-3 shadow-md backdrop-blur-sm">
-                    @foreach ([['#ef4444', 'Bahaya (≥20%)'], ['#f59e0b', 'Waspada (10–20%)'], ['#10b981', 'Aman (<10%)']] as [$c, $l])
-                        <span class="flex items-center gap-2 text-xs text-md-on-surface">
-                            <span class="h-2.5 w-2.5 rounded-full" style="background: {{ $c }}"></span>{{ $l }}
-                        </span>
-                    @endforeach
-                </div>
+            <div class="relative min-h-[340px] flex-1">
+                <div id="map" class="absolute inset-0" style="z-index: 1;"></div>
             </div>
         </div>
 

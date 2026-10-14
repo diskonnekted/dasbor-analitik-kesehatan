@@ -88,5 +88,50 @@
             </a>
         @endforeach
     </div>
+
+    <!-- Rencana Analisis (mockup, belum aktif) -->
+    <section class="space-y-4">
+        <div class="flex items-center gap-3">
+            <div class="flex h-10 w-10 items-center justify-center rounded-full bg-md-tertiary/10 text-md-tertiary">
+                <i data-lucide="telescope" class="h-5 w-5"></i>
+            </div>
+            <div>
+                <h2 class="text-xl font-medium tracking-tight text-md-on-surface">Rencana Analisis Berikutnya</h2>
+                <p class="text-xs text-md-on-surface-variant">Mockup modul yang sedang dipertimbangkan — menunggu kelengkapan &amp; validasi data pendukung.</p>
+            </div>
+        </div>
+
+        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
+            @foreach ([
+                ['icon' => 'microscope', 'tonal' => 'bg-md-primary/10 text-md-primary', 'title' => 'Determinan Stunting', 'desc' => 'Regresi multivariabel untuk mengukur seberapa besar pengaruh imunisasi, posyandu, nakes, dan faskes terhadap prevalensi stunting tiap kecamatan.', 'data' => ['Stunting', 'Imunisasi', 'Posyandu']],
+                ['icon' => 'equal', 'tonal' => 'bg-md-tertiary/10 text-md-tertiary', 'title' => 'Pemerataan Sarana Kesehatan', 'desc' => 'Indeks disparitas (Gini ratio) distribusi faskes & nakes antar kecamatan untuk melihat ketimpangan akses layanan.', 'data' => ['Sarana Kesehatan', 'Nakes']],
+                ['icon' => 'syringe', 'tonal' => 'bg-md-primary/10 text-md-primary', 'title' => 'Cakupan Imunisasi', 'desc' => 'Persentase cakupan imunisasi per kecamatan dibanding target nasional, lengkap dengan analisis kesenjangan (gap) wilayah.', 'data' => ['Imunisasi', 'Peta Kecamatan']],
+                ['icon' => 'calculator', 'tonal' => 'bg-md-tertiary/10 text-md-tertiary', 'title' => 'Proyeksi Kebutuhan SDM & Faskes', 'desc' => 'Simulasi kebutuhan tenaga kesehatan & faskes 5 tahun ke depan dibanding standar minimum (WHO 4,45 nakes per 1.000 penduduk).', 'data' => ['Nakes', 'Faskes', 'Penduduk']],
+                ['icon' => 'baby', 'tonal' => 'bg-md-primary/10 text-md-primary', 'title' => 'Korelasi Bidan–AKI/AKB', 'desc' => 'Hubungan kepadatan bidan desa dengan angka kematian ibu & bayi per kecamatan untuk menilai efektivitas layanan ibu-anak.', 'data' => ['AKI & AKB', 'Nakes']],
+                ['icon' => 'bug', 'tonal' => 'bg-md-tertiary/10 text-md-tertiary', 'title' => 'Musiman & Hotspot DBD', 'desc' => 'Analisis tren bulanan (seasonal curve) dan identifikasi kecamatan hotspot demam berdarah sebagai dasar pemberantasan sarang nyamuk.', 'data' => ['DBD per bulan', 'Peta Kecamatan']],
+            ] as $rencana)
+                <article class="relative flex flex-col rounded-[28px] border-2 border-dashed border-md-outline/40 bg-md-surface-container/60 p-6">
+                    <span class="md-badge absolute top-4 right-4 pointer-events-none">
+                        <i data-lucide="clock" class="h-3 w-3 text-md-tertiary" aria-hidden="true"></i>
+                        Rencana
+                    </span>
+                    <div class="mb-4 flex h-14 w-14 items-center justify-center rounded-full {{ $rencana['tonal'] }} opacity-80">
+                        <i data-lucide="{{ $rencana['icon'] }}" class="h-7 w-7"></i>
+                    </div>
+                    <h3 class="mb-2 pr-16 text-base font-medium text-md-on-surface">{{ $rencana['title'] }}</h3>
+                    <p class="flex-1 text-xs leading-relaxed text-md-on-surface-variant">{{ $rencana['desc'] }}</p>
+                    <div class="mt-4 flex flex-wrap gap-1.5">
+                        @foreach ($rencana['data'] as $d)
+                            <span class="rounded-full bg-md-surface-container-low px-2.5 py-1 text-[10px] font-medium text-md-on-surface-variant">{{ $d }}</span>
+                        @endforeach
+                    </div>
+                    <span class="mt-4 inline-flex cursor-default items-center gap-1.5 self-start rounded-full bg-md-outline/10 px-4 py-1.5 text-xs font-medium text-md-on-surface-variant">
+                        Dalam Perencanaan
+                        <i data-lucide="clock" class="h-3 w-3"></i>
+                    </span>
+                </article>
+            @endforeach
+        </div>
+    </section>
 </div>
 @endsection

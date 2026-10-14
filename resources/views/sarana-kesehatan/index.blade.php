@@ -44,6 +44,20 @@
         </div>
     </div>
 
+    <!-- Grafik Per Kecamatan -->
+    <div class="md-card p-6 md:p-8">
+        <div class="flex items-center justify-between gap-3 mb-6">
+            <h3 class="md-card-title">
+                <i data-lucide="bar-chart-3" class="w-4 h-4 text-md-primary"></i>
+                Jumlah Sarana Kesehatan Per Kecamatan
+            </h3>
+            <span class="md-badge"><i data-lucide="chart-column" class="h-3 w-3" aria-hidden="true"></i> Tahun Terkini</span>
+        </div>
+        <div class="h-[380px]">
+            <canvas id="saranaChart" role="img" aria-label="Grafik batang jumlah sarana kesehatan per kecamatan"></canvas>
+        </div>
+    </div>
+
     <!-- Tabel -->
     <div class="md-card overflow-hidden">
         <div class="flex items-center justify-between gap-3 border-b border-md-outline/10 px-6 py-5">
@@ -195,6 +209,37 @@
                 // Isi frame penuh sesuai batas polygon
                 map.fitBounds(geojson.getBounds());
             });
+    });
+</script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const saranaMap = {!! json_encode($mapData->values()) !!};
+
+        new Chart(document.getElementById('saranaChart'), {
+            type: 'bar',
+            data: {
+                labels: saranaMap.map(d => d.nama),
+                datasets: [
+                    { label: 'Apotek', data: saranaMap.map(d => d.apotek), backgroundColor: '#4A3773' },
+                    { label: 'Toko Obat', data: saranaMap.map(d => d.toko_obat), backgroundColor: '#6750A4' },
+                    { label: 'Pustu', data: saranaMap.map(d => d.puskesmas_pembantu), backgroundColor: '#8F76C6' },
+                    { label: 'Pusling', data: saranaMap.map(d => d.puskesmas_keliling), backgroundColor: '#B69DF8' },
+                    { label: 'Laborat', data: saranaMap.map(d => d.laborat), backgroundColor: '#7D5260' }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { position: 'bottom', labels: { usePointStyle: true, boxWidth: 10 } }
+                },
+                scales: {
+                    x: { stacked: true, grid: { display: false } },
+                    y: { stacked: true, beginAtZero: true, grid: { color: 'rgba(121,116,126,0.2)' }, border: { width: 0 } }
+                }
+            }
+        });
     });
 </script>
 @endpush

@@ -4,6 +4,28 @@
 @section('page-title', 'Dashboard Analisa Kesehatan')
 
 @section('content')
+<style>
+    .info-legend {
+        background: #FFFFFF !important;
+        padding: 14px 16px !important;
+        border: none !important;
+        border-radius: 16px !important;
+        box-shadow: 0 2px 8px rgba(28, 27, 31, 0.15) !important;
+        font-family: 'Roboto', sans-serif !important;
+        font-weight: 500 !important;
+        font-size: 11px !important;
+        line-height: 20px;
+        color: #1C1B1F;
+    }
+    .info-legend i {
+        width: 14px;
+        height: 14px;
+        float: left;
+        margin-right: 8px;
+        border-radius: 4px;
+        opacity: 0.9;
+    }
+</style>
 <div class="space-y-6 md:space-y-8">
 
     <!-- Hero -->
@@ -253,9 +275,11 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Leaflet Map for Stunting using GeoJSON
     const stuntingMapData = {!! json_encode($stuntingMapData) !!};
+    // Normalisasi nama kecamatan (konsisten dengan /analisis/spasial)
+    const normalizeName = (n) => n ? n.toLowerCase().replace(/[\s\-]/g, '').replace('purworejo', 'purwareja') : '';
     const stuntingDict = {};
     stuntingMapData.forEach(item => {
-        stuntingDict[item.nama.toLowerCase()] = item.prevalensi || 0;
+        stuntingDict[normalizeName(item.nama)] = item.prevalensi || 0;
     });
 
     const map = L.map('map').setView([-7.38, 109.65], 11);
@@ -263,42 +287,67 @@ document.addEventListener('DOMContentLoaded', function() {
         attribution: 'Tiles &copy; Esri'
     }).addTo(map);
 
+    // Ramp warna MD3 (6 tingkat, ambang WHO: 0/10/15/20/25/30)
+    const getColor = d =>
+        d >= 30 ? '#31111D' :
+        d >= 25 ? '#4A3773' :
+        d >= 20 ? '#6750A4' :
+        d >= 15 ? '#8F76C6' :
+        d >= 10 ? '#B69DF8' :
+        d > 0   ? '#E7E0EC' :
+                  '#F3EDF7';
+
     fetch('{{ asset("assets/peta_kecamatan.geojson") }}')
         .then(res => res.json())
         .then(data => {
-            L.geoJSON(data, {
+            const geojson = L.geoJSON(data, {
                 style: function(feature) {
-                    let kecName = feature.properties.Kecamatan ? feature.properties.Kecamatan.toLowerCase() : '';
-                    let stuntingVal = stuntingDict[kecName] || 0;
+                    let stuntingVal = stuntingDict[normalizeName(feature.properties.Kecamatan)] || 0;
 
-                    let color = '#10b981'; // Aman
-                    if (stuntingVal >= 20) color = '#ef4444'; // Bahaya
-                    else if (stuntingVal >= 10) color = '#f59e0b'; // Waspada
-
-                    return { fillColor: color, weight: 1.5, opacity: 1, color: '#49454F', fillOpacity: 0.75 };
+                    return { fillColor: getColor(stuntingVal), weight: 1.5, opacity: 1, color: '#49454F', fillOpacity: 0.85 };
                 },
                 onEachFeature: function(feature, layer) {
                     let kecName = feature.properties.Kecamatan || 'Unknown';
-                    let stuntingVal = stuntingDict[kecName.toLowerCase()] || 0;
+                    let stuntingVal = stuntingDict[normalizeName(kecName)] || 0;
 
                     layer.on({
                         mouseover: function(e) {
-                            e.target.setStyle({ weight: 3, fillOpacity: 0.9 });
+                            e.target.setStyle({ weight: 3, color: '#1C1B1F', fillOpacity: 0.95 });
                             e.target.bringToFront();
                         },
                         mouseout: function(e) {
-                            e.target.setStyle({ weight: 1.5, fillOpacity: 0.75 });
+                            geojson.resetStyle(e.target);
                         }
                     });
 
                     layer.bindPopup(
-                        '<div style="min-width: 160px; color: #1C1B1F;">' +
-                            '<h4 style="margin: 0 0 6px; font-size: 13px; font-weight: 500; color: #6750A4;">Kec. ' + kecName + '</h4>' +
-                            '<p style="margin: 0; font-size: 12px;">Stunting: <strong>' + stuntingVal.toFixed(2) + '%</strong></p>' +
+                        '<div style="font-family: \'Roboto\', sans-serif; font-size: 12px; color: #1C1B1F; min-width: 190px; padding: 4px;">' +
+                            '<h4 style="margin: 0 0 8px 0; font-size: 13px; font-weight: 500; padding-bottom: 6px; border-bottom: 1px solid #E7E0EC;">Kec. ' + kecName + '</h4>' +
+                            '<div style="display: flex; justify-content: space-between; align-items: center; margin: 6px 0; padding: 6px 10px; background: #E8DEF8; border-radius: 12px;">' +
+                                '<span>Prevalensi Stunting</span>' +
+                                '<strong style="color: #6750A4;">' + stuntingVal.toFixed(2) + '%</strong>' +
+                            '</div>' +
                         '</div>'
                     );
                 }
             }).addTo(map);
+
+            // Sesuaikan viewport ke batas polygon (bukan koordinat hardcoded)
+            map.fitBounds(geojson.getBounds());
+
+            // Legenda (sama dengan /analisis/spasial)
+            const legend = L.control({ position: 'bottomright' });
+            legend.onAdd = function() {
+                const div = L.DomUtil.create('div', 'info-legend');
+                const labels = ['Aman (<10%)', 'Ringan (10-15%)', 'Waspada (15-20%)', 'Tinggi (20-25%)', 'Sangat Tinggi (25-30%)', 'Kritis (>30%)'];
+                const colors = ['#E7E0EC', '#B69DF8', '#8F76C6', '#6750A4', '#4A3773', '#31111D'];
+                div.innerHTML = '<strong style="font-size: 11px; display: block; margin-bottom: 6px; text-transform: uppercase; letter-spacing: 0.5px;">Stunting</strong>';
+                for (let i = 0; i < labels.length; i++) {
+                    div.innerHTML += '<i style="background:' + colors[i] + '"></i> ' + labels[i] + '<br>';
+                }
+                return div;
+            };
+            legend.addTo(map);
         });
 });
 </script>
